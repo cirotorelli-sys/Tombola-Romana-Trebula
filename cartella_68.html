@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartella 68 - Tombola Romana</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #FFF8DC;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #8B0000;
+        }
+
+        .header h1 {
+            color: #8B0000;
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .numero-cartella {
+            background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 2.5em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .cartella-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .cartella-cella {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 3px solid #D2691E;
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .cartella-cella:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .cartella-cella.segnato {
+            background: #FFD700;
+            border-color: #FF8C00;
+            transform: scale(0.95);
+        }
+
+        .cartella-cella-icona {
+            font-size: 2.5em;
+            margin-bottom: 5px;
+        }
+
+        .cartella-cella-nome {
+            font-size: 0.75em;
+            font-weight: bold;
+            color: #654321;
+            line-height: 1.2;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1em;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 0.9em;
+        }
+
+        .stats {
+            background: white;
+            border: 3px solid #D2691E;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .stats-label {
+            color: #654321;
+            font-weight: bold;
+        }
+
+        .stats-value {
+            color: #8B0000;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #8B0000;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .cartella-cella-icona {
+                font-size: 2em;
+            }
+
+            .cartella-cella-nome {
+                font-size: 0.65em;
+            }
+
+            .numero-cartella {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏛️ TOMBOLA ROMANA 🏛️</h1>
+        </div>
+
+        <div class="numero-cartella">
+            CARTELLA N. 68
+        </div>
+
+        <div class="stats">
+            <div class="stats-row">
+                <span class="stats-label">Simboli Segnati:</span>
+                <span class="stats-value" id="segnati">0/15</span>
+            </div>
+            <div class="stats-row">
+                <span class="stats-label">Mancanti:</span>
+                <span class="stats-value" id="mancanti">15</span>
+            </div>
+        </div>
+
+        <div class="cartella-grid">
+                    <div class="cartella-cella" data-simbolo="41" onclick="toggleCella(this)">
+                        <div class="cartella-cella-icona">👔</div>
+                        <div class="cartella-cella-nome">Tunica</div>
+                    </div>
+                    <div class="cartella-cella" data-simbolo="77" onclick="toggleCella(this)">
+                        <div class="cartella-cella-icona">🍇</div>
+                        <div class="cartella-cella-nome">Uva</div>
+                    </div>
+                    <div class="cartella-cella" data-simbolo="18" onclick="toggleCella(this)">
+                        <div class="cartella-cella-icona">🏰</div>
+                        <div class="cartella-cella-nome">Arco</div>
+                    </div>
+                    <div class="cartella-cella" data-simbolo="46" onclick="toggleCella(this)">
+                        <div class="cartella-cella-icona">📍</div>
+                        <div class="cartella-cella-nome">Fibula</div>
+                    </div>
+                    <div class="cartella-cella" data-simbolo="81" onclick="toggleCella(this)">
+                        <div class="cartella-cella-icona">⚒️</div>
+                        <div class="cartella-cella-nome">Incudine</div>
+                    </div>
+                    <div class="cartella-cella" data-simbolo="17" onclick="toggleCella(this)">
+                        <div class="cartella-cella-icona">🌉</div>
+                        <div class="cartella-cella-nome">Acquedotto</div>
+                    </div>
+                    <div class="cartella-cella" data-simbolo="67" onclick="toggleCella(this)">
+                        <div class="cartella-cella-icona">🏹</div>
+                        <div class="cartella-cella-nome">Catapulta</div>
+                    </div>
+                    <div class="cartella-cella" data-simbolo="29" onclick="toggleCella(this)">
+                        <div class="cartella-cella-icona">🕯️</div>
+                        <div class="cartella-cella-nome">Larario</div>
+                    </div>
+                    <div class="cartella-cella" data-simbolo="19" onclick="toggleCella(this)">
+                        <div class="cartella-cella-icona">📚</div>
+                        <div class="cartella-cella-nome">Biblioteca</div>
+                    </div>
+                    <div class="cartella-cella" data-simbolo="62" onclick="toggleCella(this)">
+                        <div class="cartella-cella-icona">🔱</div>
+                        <div class="cartella-cella-nome">Lancia</div>
+                    </div>
+                    <div class="cartella-cella" data-simbolo="1" onclick="toggleCella(this)">
+                        <div class="cartella-cella-icona">⚔️</div>
+                        <div class="cartella-cella-nome">Marte</div>
+                    </div>
+                    <div class="cartella-cella" data-simbolo="16" onclick="toggleCella(this)">
+                        <div class="cartella-cella-icona">🎭</div>
+                        <div class="cartella-cella-nome">Teatro</div>
+                    </div>
+                    <div class="cartella-cella" data-simbolo="56" onclick="toggleCella(this)">
+                        <div class="cartella-cella-icona">💈</div>
+                        <div class="cartella-cella-nome">Pettine</div>
+                    </div>
+                    <div class="cartella-cella" data-simbolo="88" onclick="toggleCella(this)">
+                        <div class="cartella-cella-icona">🐕</div>
+                        <div class="cartella-cella-nome">Cane</div>
+                    </div>
+                    <div class="cartella-cella" data-simbolo="87" onclick="toggleCella(this)">
+                        <div class="cartella-cella-icona">🐴</div>
+                        <div class="cartella-cella-nome">Cavallo</div>
+                    </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="resetCartella()">🔄 Reset Cartella</button>
+        </div>
+
+        <div class="back-link">
+            <a href="index.html">← Torna al Menu Principale</a>
+        </div>
+    </div>
+
+    <script>
+        function toggleCella(cella) {
+            cella.classList.toggle('segnato');
+            aggiornaStats();
+        }
+
+        function aggiornaStats() {
+            const totale = 15;
+            const segnati = document.querySelectorAll('.cartella-cella.segnato').length;
+            const mancanti = totale - segnati;
+            
+            document.getElementById('segnati').textContent = segnati + '/' + totale;
+            document.getElementById('mancanti').textContent = mancanti;
+        }
+
+        function resetCartella() {
+            if (confirm('Vuoi resettare la cartella?')) {
+                document.querySelectorAll('.cartella-cella').forEach(cella => {
+                    cella.classList.remove('segnato');
+                });
+                aggiornaStats();
+            }
+        }
+    </script>
+</body>
+</html>

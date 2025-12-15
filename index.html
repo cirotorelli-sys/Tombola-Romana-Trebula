@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tombola Romana - Sistema Completo a 3 Livelli">
+    <meta name="theme-color" content="#8B0000">
+    <title>Tombola Romana - Menu Principale</title>
+    
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #FFF8DC;
+            border-radius: 30px;
+            padding: 50px 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .logo {
+            font-size: 5em;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            color: #8B0000;
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            color: #654321;
+            font-size: 1.3em;
+            font-style: italic;
+        }
+
+        .versioni-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .versione-card {
+            background: white;
+            border: 4px solid #D2691E;
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .versione-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-color: #8B0000;
+        }
+
+        .versione-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .versione-title {
+            color: #8B0000;
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .versione-descrizione {
+            color: #654321;
+            font-size: 0.95em;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .versione-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #8B0000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .versione-features {
+            text-align: left;
+            font-size: 0.85em;
+            color: #654321;
+            line-height: 1.8;
+        }
+
+        .versione-features li {
+            list-style: none;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .versione-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #228B22;
+            font-weight: bold;
+        }
+
+        .info-finale {
+            background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        .info-finale strong {
+            font-size: 1.2em;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .logo {
+                font-size: 3.5em;
+            }
+
+            .versioni-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🏛️</div>
+            <h1>TOMBOLA ROMANA</h1>
+            <div class="subtitle">Sistema Completo a 3 Livelli</div>
+        </div>
+
+        <div class="versioni-grid">
+            <!-- LIVELLO 1: APP MOBILE -->
+            <a href="mobile.html" class="versione-card">
+                <div class="versione-icon">📱</div>
+                <div class="versione-badge">LIVELLO 1</div>
+                <div class="versione-title">App Mobile</div>
+                <div class="versione-descrizione">
+                    Versione leggera per giocatori<br>
+                    <strong style="color: #8B0000;">Solo Smartphone</strong>
+                </div>
+                <ul class="versione-features">
+                    <li>Interfaccia touch ottimizzata</li>
+                    <li>Selezione cartella (1-90)</li>
+                    <li>Segnatura rapida simboli</li>
+                    <li>Statistiche in tempo reale</li>
+                    <li>Funziona offline</li>
+                    <li>Installabile come app</li>
+                </ul>
+            </a>
+
+            <!-- LIVELLO 2: VERSIONE WEB PC -->
+            <a href="web.html" class="versione-card">
+                <div class="versione-icon">🖥️</div>
+                <div class="versione-badge">LIVELLO 2</div>
+                <div class="versione-title">Versione Web</div>
+                <div class="versione-descrizione">
+                    Sistema completo per banco<br>
+                    <strong style="color: #8B0000;">PC / Tablet</strong>
+                </div>
+                <ul class="versione-features">
+                    <li>Registrazione giocatori</li>
+                    <li>Tabellone completo 90 simboli</li>
+                    <li>Estrazione automatica</li>
+                    <li>Controllo vittorie</li>
+                    <li>Visualizza tutte le cartelle</li>
+                    <li>Riepilogo finale premi</li>
+                </ul>
+            </a>
+
+            <!-- LIVELLO 3: VERSIONE STAMPABILE -->
+            <a href="tombola_romana_stampabile.html" class="versione-card">
+                <div class="versione-icon">🖨️</div>
+                <div class="versione-badge">LIVELLO 3</div>
+                <div class="versione-title">Stampabile</div>
+                <div class="versione-descrizione">
+                    Kit completo da stampare<br>
+                    <strong style="color: #8B0000;">90 Tessere in 1 Foglio!</strong>
+                </div>
+                <ul class="versione-features">
+                    <li>Tabellone centrato A4</li>
+                    <li>90 tessere in 1 SOLO foglio!</li>
+                    <li>Stampa cartelle selettive</li>
+                    <li>Risparmio 8 fogli di carta</li>
+                    <li>Tessere = celle tabellone</li>
+                    <li>Solo 48 pagine totali</li>
+                </ul>
+            </a>
+        </div>
+
+        <div class="info-finale">
+            <strong>🎮 Come Giocare</strong>
+            <div style="font-size: 0.95em;">
+                <strong>Mobile:</strong> Ogni giocatore apre l'app mobile e sceglie la sua cartella<br>
+                <strong>Banco:</strong> L'organizzatore apre la versione web e gestisce il gioco<br>
+                <strong>Fisico:</strong> Stampa tutto e gioca come una vera tombola tradizionale
+            </div>
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid rgba(255,255,255,0.3); font-size: 0.9em;">
+                Progettato da <strong>Ciro Torelli</strong>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Redirect automatico per mobile
+        function isMobile() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const mobileKeywords = ['android', 'webos', 'iphone', 'ipad', 'ipod', 'blackberry', 'windows phone'];
+            
+            // Controlla se è un dispositivo mobile
+            const isMobileDevice = mobileKeywords.some(keyword => userAgent.includes(keyword));
+            
+            // Controlla anche la dimensione dello schermo
+            const isSmallScreen = window.innerWidth <= 768;
+            
+            // Ma esclude tablet (che sono mobile ma hanno schermi grandi)
+            const isTablet = (userAgent.includes('ipad') || 
+                            (userAgent.includes('android') && !userAgent.includes('mobile'))) ||
+                            (isSmallScreen && window.innerWidth >= 600);
+            
+            return isMobileDevice && isSmallScreen && !isTablet;
+        }
+
+        // Se è mobile, redirect automatico alla versione giocatore
+        if (isMobile()) {
+            window.location.href = 'mobile.html';
+        }
+    </script>
+</body>
+</html>
