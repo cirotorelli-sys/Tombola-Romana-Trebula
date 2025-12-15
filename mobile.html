@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="description" content="Tombola Romana - App Giocatore Mobile">
     <meta name="theme-color" content="#8B0000">
     <title>Tombola Romana - Giocatore</title>
@@ -26,16 +26,29 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        body {
-            font-family: 'Georgia', serif;
-            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            overflow-x: hidden;
-        }
+       body {
+    font-family: 'Georgia', serif;
+    background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+    min-height: 100vh;
+    padding: 20px;
+    margin: 0;
+}
+
+/* Supporto orientamento landscape */
+@media (orientation: landscape) {
+    .container-mobile {
+        max-width: 90%;
+    }
+    
+    .cartella-grid-mobile {
+        gap: 4px;
+        max-width: 100%;
+    }
+    
+    .cella-mobile {
+        padding: 2px;
+    }
+}
 
         #pagina-selezione, #pagina-cartella {
             display: none;
@@ -242,25 +255,25 @@
         }
 
         .cella-numero-mobile {
-            font-size: 0.7em;
-            font-weight: bold;
-            color: #8B0000;
-            margin-bottom: 2px;
-        }
+    font-size: 0.55em;
+    font-weight: bold;
+    color: #8B0000;
+    margin-bottom: 1px;
+}
 
-        .cella-icona-mobile {
-            font-size: 1.8em;
-            margin-bottom: 2px;
-            line-height: 1;
-        }
+.cella-icona-mobile {
+    font-size: 2.2em;
+    margin-bottom: 1px;
+    line-height: 1;
+}
 
-        .cella-nome-mobile {
-            font-size: 0.6em;
-            font-weight: bold;
-            color: #654321;
-            line-height: 1.1;
-            word-break: break-word;
-        }
+.cella-nome-mobile {
+    font-size: 0.5em;
+    font-weight: bold;
+    color: #654321;
+    line-height: 1.05;
+    word-break: break-word;
+}
 
         .btn-secondary {
             width: 100%;
