@@ -1,21 +1,22 @@
 {
   "name": "Tombola Romana",
-  "short_name": "Tombola Romana",
-  "description": "Gioco educativo della Tombola con simboli dell'Antica Roma",
-  "start_url": "/index.html",
+  "short_name": "Tombola",
+  "description": "Tombola Romana - Sistema Completo",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#8B4513",
   "theme_color": "#8B0000",
-  "orientation": "portrait",
+  "orientation": "any",
+  "scope": "./",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "./icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icon-512.png",
+      "src": "./icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
