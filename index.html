@@ -150,6 +150,76 @@
             margin-bottom: 10px;
         }
 
+        /* MODAL README */
+        .modal-readme {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content-readme {
+            background: white;
+            margin: 2% auto;
+            padding: 0;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            border-radius: 15px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+            overflow: hidden;
+            animation: slideDown 0.3s;
+        }
+
+        .modal-header-readme {
+            background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header-readme h2 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+
+        .close-readme {
+            color: white;
+            font-size: 2.5em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            line-height: 1;
+        }
+
+        .close-readme:hover {
+            transform: scale(1.2) rotate(90deg);
+        }
+
+        .modal-body-readme {
+            padding: 30px;
+            max-height: calc(90vh - 100px);
+            overflow-y: auto;
+            line-height: 1.6;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 30px 20px;
@@ -236,6 +306,41 @@
             </a>
         </div>
 
+        <!-- BOTTONE INFORMAZIONI -->
+        <div style="text-align: center; margin: 30px 0 20px 0;">
+            <button onclick="openReadme()" style="
+                display: inline-block;
+                background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+                color: white;
+                padding: 15px 40px;
+                border-radius: 25px;
+                text-decoration: none;
+                font-size: 1.1em;
+                font-weight: bold;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                transition: all 0.3s;
+                border: 3px solid #2E5C8A;
+                cursor: pointer;
+                font-family: 'Georgia', serif;
+            " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.4)';" 
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.3)';">
+                ℹ️ Informazioni sul Progetto
+            </button>
+        </div>
+
+        <!-- MODAL README -->
+        <div id="modalReadme" class="modal-readme" onclick="closeReadme(event)">
+            <div class="modal-content-readme" onclick="event.stopPropagation()">
+                <div class="modal-header-readme">
+                    <h2>📖 Informazioni sul Progetto</h2>
+                    <span class="close-readme" onclick="closeReadme()">&times;</span>
+                </div>
+                <div class="modal-body-readme" id="readmeContent">
+                    <p style="text-align: center; color: #666;">Caricamento...</p>
+                </div>
+            </div>
+        </div>
+
         <div class="info-finale">
             <strong>🎮 Come Giocare</strong>
             <div style="font-size: 0.95em;">
@@ -273,6 +378,98 @@
         if (isMobile()) {
             window.location.href = 'mobile.html';
         }
+
+        // Gestione Modal README
+        function openReadme() {
+            const modal = document.getElementById('modalReadme');
+            const content = document.getElementById('readmeContent');
+            
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Blocca scroll della pagina
+            
+            // Carica il README.md
+            fetch('README.md')
+                .then(response => {
+                    if (!response.ok) throw new Error('README non trovato');
+                    return response.text();
+                })
+                .then(markdown => {
+                    // Converte markdown in HTML basilare
+                    const html = markdownToHTML(markdown);
+                    content.innerHTML = html;
+                })
+                .catch(error => {
+                    content.innerHTML = `
+                        <div style="text-align: center; padding: 40px;">
+                            <h2 style="color: #e74c3c;">❌ Errore</h2>
+                            <p>Impossibile caricare il README.md</p>
+                            <p style="color: #666; font-size: 0.9em;">Il file potrebbe non essere ancora stato caricato su GitHub.</p>
+                            <a href="README.md" target="_blank" style="
+                                display: inline-block;
+                                background: #4A90E2;
+                                color: white;
+                                padding: 10px 20px;
+                                border-radius: 10px;
+                                text-decoration: none;
+                                margin-top: 20px;
+                            ">Apri in nuova scheda</a>
+                        </div>
+                    `;
+                });
+        }
+
+        function closeReadme(event) {
+            if (!event || event.target === document.getElementById('modalReadme')) {
+                const modal = document.getElementById('modalReadme');
+                modal.style.display = 'none';
+                document.body.style.overflow = ''; // Riabilita scroll
+            }
+        }
+
+        // Conversione basilare Markdown to HTML
+        function markdownToHTML(markdown) {
+            let html = markdown;
+            
+            // Headers
+            html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+            html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+            html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+            
+            // Bold
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // Italic
+            html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            
+            // Links
+            html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" style="color: #4A90E2;">$1</a>');
+            
+            // Code blocks
+            html = html.replace(/```([^`]+)```/g, '<pre style="background: #f5f5f5; padding: 15px; border-radius: 5px; overflow-x: auto;"><code>$1</code></pre>');
+            
+            // Inline code
+            html = html.replace(/`([^`]+)`/g, '<code style="background: #f5f5f5; padding: 2px 6px; border-radius: 3px;">$1</code>');
+            
+            // Lists
+            html = html.replace(/^\- (.*$)/gim, '<li>$1</li>');
+            html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+            
+            // Line breaks
+            html = html.replace(/\n\n/g, '</p><p>');
+            html = '<p>' + html + '</p>';
+            
+            // Horizontal rules
+            html = html.replace(/^---$/gm, '<hr style="border: none; border-top: 2px solid #ddd; margin: 20px 0;">');
+            
+            return html;
+        }
+
+        // Chiudi modal con ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeReadme();
+            }
+        });
     </script>
 </body>
 </html>
