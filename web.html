@@ -797,6 +797,11 @@
             if (curiositaAttive) {
                 console.log('🏛️ Curiosità Trebula ATTIVE');
             }
+                // Attiva/disattiva curiosità
+            curiositaAttive = document.getElementById('toggleCuriosita').checked;
+            if (curiositaAttive) {
+                console.log('🏛️ Curiosità Trebula ATTIVE');
+            }
             }
 
             giocoCorrente.estratti = [];
@@ -892,6 +897,8 @@
             aggiornaStats();
             
            setTimeout(() => controllaVittorie(), 500);
+            // Mostra curiosità se attive
+            setTimeout(() => mostraCuriosita(index), 600);
             
             // Mostra curiosità se attive
             setTimeout(() => mostraCuriosita(index), 600);
