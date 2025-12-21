@@ -1,0 +1,91 @@
+{
+  "curiosita": [
+    {
+      "simboloIndex": 0,
+      "simbolo": "Foro",
+      "numero": 1,
+      "titolo": "Il Foro di Trebula Mutuesca",
+      "testo": "Il foro di Trebula Mutuesca era il cuore pulsante della città romana. Situato nell'attuale territorio di Monteleone Sabino, rappresentava il centro della vita pubblica, commerciale e religiosa. Qui si svolgevano le assemblee cittadine e si amministrava la giustizia. Gli scavi archeologici hanno riportato alla luce importanti resti di questo spazio monumentale.",
+      "immagine": "🏛️"
+    },
+    {
+      "simboloIndex": 5,
+      "simbolo": "Tempio",
+      "numero": 6,
+      "titolo": "I Templi della Sabina",
+      "testo": "Trebula Mutuesca ospitava diversi templi dedicati alle divinità romane. Il culto principale era dedicato a Giove, protettore della città. La posizione strategica del municipio sulla via Salaria favoriva gli scambi culturali e religiosi con Roma. I resti di un importante tempio sono ancora visibili nel sito archeologico.",
+      "immagine": "⛩️"
+    },
+    {
+      "simboloIndex": 12,
+      "simbolo": "Acquedotto",
+      "numero": 13,
+      "titolo": "L'Acquedotto Romano",
+      "testo": "Il sistema idrico di Trebula Mutuesca era estremamente avanzato. L'acquedotto portava acqua fresca dalle sorgenti montane fino alla città, alimentando terme, fontane pubbliche e abitazioni private. Le arcate dell'acquedotto rappresentavano un capolavoro di ingegneria romana, testimonianza del benessere raggiunto dal municipio.",
+      "immagine": "🌊"
+    },
+    {
+      "simboloIndex": 23,
+      "simbolo": "Giove",
+      "numero": 24,
+      "titolo": "Il Culto di Giove a Trebula",
+      "testo": "Giove era la divinità protettrice di Trebula Mutuesca. Il suo culto era centrale nella vita religiosa della città. Durante le festività, si svolgevano processioni e sacrifici in suo onore. Il tempio dedicato a Giove dominava il foro, simbolo del potere divino e terreno della Roma antica nella Sabina.",
+      "immagine": "⚡"
+    },
+    {
+      "simboloIndex": 34,
+      "simbolo": "Teatro",
+      "numero": 35,
+      "titolo": "Il Teatro di Trebula Mutuesca",
+      "testo": "Il teatro romano di Trebula Mutuesca poteva ospitare oltre 1.500 spettatori. Costruito sfruttando il pendio naturale della collina, rappresentava uno dei più importanti edifici di spettacolo della Sabina. Qui si rappresentavano commedie, tragedie e spettacoli di mimo, rendendo la cultura romana accessibile a tutti i cittadini.",
+      "immagine": "🎭"
+    },
+    {
+      "simboloIndex": 45,
+      "simbolo": "Via Salaria",
+      "numero": 46,
+      "titolo": "La Via Salaria e il Sale",
+      "testo": "Trebula Mutuesca sorgeva lungo la Via Salaria, l'antica strada del sale che collegava Roma all'Adriatico. Questa posizione strategica rese la città un importante centro commerciale. Il sale, bene preziosissimo nell'antichità, transitava qui diretto verso Roma, portando ricchezza e prosperità al municipio sabino.",
+      "immagine": "🛣️"
+    },
+    {
+      "simboloIndex": 56,
+      "simbolo": "Terme",
+      "numero": 57,
+      "titolo": "Le Terme Pubbliche",
+      "testo": "Le terme di Trebula Mutuesca erano un centro di socialità e benessere. Comprendevano frigidarium (bagno freddo), tepidarium (tiepido) e calidarium (caldo), oltre a palestre e biblioteche. Questi complessi termali testimoniano il livello di civiltà raggiunto dal municipio romano, dove cultura del corpo e dello spirito si fondevano.",
+      "immagine": "♨️"
+    },
+    {
+      "simboloIndex": 67,
+      "simbolo": "Mosaico",
+      "numero": 68,
+      "titolo": "I Mosaici di Trebula",
+      "testo": "Gli scavi archeologici hanno riportato alla luce splendidi mosaici policromi che decoravano le ville e gli edifici pubblici di Trebula Mutuesca. Questi capolavori raffiguravano scene mitologiche, motivi geometrici e scene di vita quotidiana. Testimonianza dell'alto livello artistico raggiunto dagli artigiani locali.",
+      "immagine": "🎨"
+    },
+    {
+      "simboloIndex": 78,
+      "simbolo": "Santa Vittoria",
+      "numero": 79,
+      "titolo": "Santa Vittoria, Patrona di Monteleone",
+      "testo": "Santa Vittoria è la santa patrona di Monteleone Sabino, celebrata il 23 dicembre. La tradizione cristiana si intreccia con la storia di Trebula Mutuesca: il culto della santa si sviluppò proprio dove sorgeva l'antica città romana. La festa patronale mantiene vive le radici storiche del territorio, unendo passato romano e tradizione cristiana.",
+      "immagine": "👑"
+    },
+    {
+      "simboloIndex": 89,
+      "simbolo": "Sabini",
+      "numero": 90,
+      "titolo": "I Sabini e la Fondazione",
+      "testo": "Trebula Mutuesca fu fondata dal popolo sabino, antichi abitanti di queste terre. Il nome 'Mutuesca' deriva probabilmente dal dio sabino Mutunus. Dopo la conquista romana, la città mantenne la sua identità sabina pur integrandosi perfettamente nel sistema romano, divenendo un importante municipium. Un esempio di integrazione culturale nell'antica Italia.",
+      "immagine": "🏺"
+    }
+  ],
+  "impostazioni": {
+    "titoloPredefinito": "Curiosità su Trebula Mutuesca",
+    "colorePrimario": "#8B4513",
+    "coloreSecondario": "#D2691E",
+    "durataPopup": 0,
+    "nota": "durataPopup = 0 significa che il popup resta aperto fino alla chiusura manuale"
+  }
+}
