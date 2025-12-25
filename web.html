@@ -598,100 +598,6 @@
     </div>
 
     <script>
-    ===========================================
-SNIPPET 1: SISTEMA AUDIO (Incolla dopo <script>)
-===========================================
-
-        // SISTEMA AUDIO
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        const audioCtx = new AudioContext();
-
-        // Suono estrazione (ding melodioso)
-        function suonoEstrazione() {
-            const now = audioCtx.currentTime;
-            const oscillator = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            
-            // Nota melodiosa (MI - SOL - DO)
-            oscillator.frequency.setValueAtTime(659.25, now); // MI
-            oscillator.frequency.setValueAtTime(783.99, now + 0.1); // SOL
-            oscillator.frequency.setValueAtTime(1046.50, now + 0.2); // DO alto
-            
-            oscillator.type = 'sine';
-            
-            gainNode.gain.setValueAtTime(0.3, now);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-            
-            oscillator.start(now);
-            oscillator.stop(now + 0.4);
-        }
-
-        // Suono vittoria (campana/fanfara)
-        function suonoVittoria(tipo) {
-            const now = audioCtx.currentTime;
-            const durata = tipo === 'tombola' ? 3 : 1.5;
-            
-            // Crea una sequenza di note festose
-            const note = tipo === 'tombola' 
-                ? [523.25, 659.25, 783.99, 1046.50, 783.99, 1046.50, 1318.51] // DO-MI-SOL-DO-SOL-DO-MI (Tombola)
-                : [523.25, 659.25, 783.99]; // DO-MI-SOL (Altri premi)
-            
-            note.forEach((freq, index) => {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                
-                osc.frequency.value = freq;
-                osc.type = 'triangle'; // Suono più caldo tipo campana
-                
-                const startTime = now + (index * 0.2);
-                const stopTime = startTime + 0.3;
-                
-                gain.gain.setValueAtTime(0.4, startTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, stopTime);
-                
-                osc.start(startTime);
-                osc.stop(stopTime);
-            });
-            
-            // Se è TOMBOLA, aggiungi riverbero
-            if (tipo === 'tombola') {
-                setTimeout(() => {
-                    // Ripeti le note più in alto per effetto eco
-                    note.forEach((freq, index) => {
-                        const osc = audioCtx.createOscillator();
-                        const gain = audioCtx.createGain();
-                        
-                        osc.connect(gain);
-                        gain.connect(audioCtx.destination);
-                        
-                        osc.frequency.value = freq * 1.5; // Ottava superiore
-                        osc.type = 'sine';
-                        
-                        const startTime = audioCtx.currentTime + (index * 0.15);
-                        const stopTime = startTime + 0.25;
-                        
-                        gain.gain.setValueAtTime(0.2, startTime);
-                        gain.gain.exponentialRampToValueAtTime(0.01, stopTime);
-                        
-                        osc.start(startTime);
-                        osc.stop(stopTime);
-                    });
-                }, 300);
-            }
-        }
-
-        // Inizializza audio al primo click (richiesto dai browser)
-        document.addEventListener('click', function initAudio() {
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-        }, { once: true });
         // SISTEMA CURIOSITÀ TREBULA
         let curiositaAttive = false;
         let curiositaData = null;
@@ -952,23 +858,11 @@ SNIPPET 1: SISTEMA AUDIO (Incolla dopo <script>)
             
             segnaSuCartelle(index);
             aggiornaStats();
-            ===========================================
-SNIPPET 2: MODIFICA funzione estraiSimbolo
-===========================================
-
-CERCA questa riga nella funzione estraiSimbolo():
-            aggiornaStats();
-
-AGGIUNGI SUBITO DOPO:
             
-            // Suono estrazione
-            suonoEstrazione();
-
             setTimeout(() => controllaVittorie(), 500);
             
             // Mostra curiosità se attive
             setTimeout(() => mostraCuriosita(index), 600);
-            
         }
 
         function segnaSuCartelle(simboloIndex) {
@@ -1071,9 +965,6 @@ AGGIUNGI SUBITO DOPO:
         }
 
         function mostraVittoria(messaggio) {
-        	 // Suono vittoria
-    const tipoSuono = tipo === 'tombola' ? 'tombola' : 'premio';
-    suonoVittoria(tipoSuono);
             if (document.querySelector('.vittoria-alert')) return;
             
             document.getElementById('btnEstrai').disabled = true;
