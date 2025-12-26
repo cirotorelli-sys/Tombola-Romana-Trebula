@@ -1174,11 +1174,15 @@
                 const segnate = cartellaDiv.querySelectorAll('.cartella-cella.segnato');
                 const numSegnate = segnate.length;
                 
-                const giocatore = giocoCorrente.giocatori[indexGiocatore];
+                // Prendi nome e cartella dal DOM (funziona sia locale che online)
+                const headerText = cartellaDiv.querySelector('.cartella-header').textContent;
+                const match = headerText.match(/(.+) - Cartella (\d+)/);
+                const nomeGiocatore = match ? match[1] : 'Giocatore';
+                const numeroCartella = match ? match[2] : '?';
                 
                 // TOMBOLA
                 if (numSegnate === 15 && !giocoCorrente.premiVinti.tombola) {
-                    giocoCorrente.premiVinti.tombola = {nome: giocatore.nome, cartella: giocatore.cartella};
+                    giocoCorrente.premiVinti.tombola = {nome: nomeGiocatore, cartella: numeroCartella};
                     mostraVittoriaFinale();
                     return;
                 }
@@ -1186,8 +1190,8 @@
                 // CINQUINA
                 if (!giocoCorrente.premiVinti.cinquina && numSegnate >= 5) {
                     if (controllaRigaCompleta(cartellaDiv)) {
-                        giocoCorrente.premiVinti.cinquina = {nome: giocatore.nome, cartella: giocatore.cartella};
-                        mostraVittoria(`🎊 CINQUINA! 🎊<br>${giocatore.nome}<br>Cartella ${giocatore.cartella}`);
+                        giocoCorrente.premiVinti.cinquina = {nome: nomeGiocatore, cartella: numeroCartella};
+                        mostraVittoria(`🎊 CINQUINA! 🎊<br>${nomeGiocatore}<br>Cartella ${numeroCartella}`);
                         return;
                     }
                 }
@@ -1195,8 +1199,8 @@
                 // QUATERNA
                 if (!giocoCorrente.premiVinti.quaterna && numSegnate >= 4) {
                     if (controllaRiga(cartellaDiv, 4)) {
-                        giocoCorrente.premiVinti.quaterna = {nome: giocatore.nome, cartella: giocatore.cartella};
-                        mostraVittoria(`🎯 QUATERNA! 🎯<br>${giocatore.nome}<br>Cartella ${giocatore.cartella}`);
+                        giocoCorrente.premiVinti.quaterna = {nome: nomeGiocatore, cartella: numeroCartella};
+                        mostraVittoria(`🎯 QUATERNA! 🎯<br>${nomeGiocatore}<br>Cartella ${numeroCartella}`);
                         return;
                     }
                 }
@@ -1204,8 +1208,8 @@
                 // TERNO
                 if (!giocoCorrente.premiVinti.terno && numSegnate >= 3) {
                     if (controllaRiga(cartellaDiv, 3)) {
-                        giocoCorrente.premiVinti.terno = {nome: giocatore.nome, cartella: giocatore.cartella};
-                        mostraVittoria(`🎪 TERNO! 🎪<br>${giocatore.nome}<br>Cartella ${giocatore.cartella}`);
+                        giocoCorrente.premiVinti.terno = {nome: nomeGiocatore, cartella: numeroCartella};
+                        mostraVittoria(`🎪 TERNO! 🎪<br>${nomeGiocatore}<br>Cartella ${numeroCartella}`);
                         return;
                     }
                 }
@@ -1213,8 +1217,8 @@
                 // AMBO
                 if (!giocoCorrente.premiVinti.ambo && numSegnate >= 2) {
                     if (controllaRiga(cartellaDiv, 2)) {
-                        giocoCorrente.premiVinti.ambo = {nome: giocatore.nome, cartella: giocatore.cartella};
-                        mostraVittoria(`🎲 AMBO! 🎲<br>${giocatore.nome}<br>Cartella ${giocatore.cartella}`);
+                        giocoCorrente.premiVinti.ambo = {nome: nomeGiocatore, cartella: numeroCartella};
+                        mostraVittoria(`🎲 AMBO! 🎲<br>${nomeGiocatore}<br>Cartella ${numeroCartella}`);
                         return;
                     }
                 }
