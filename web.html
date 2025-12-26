@@ -501,6 +501,9 @@
             to { transform: scale(1); opacity: 1; }
         }
     </style>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 </head>
 <body>
     <div class="container">
@@ -522,7 +525,7 @@
             <h2 style="color: #4A90E2; text-align: center; margin-bottom: 15px;">🌐 Modalità Online</h2>
             <div style="text-align: center;">
                 <p style="color: #666; margin-bottom: 15px;">Crea una stanza per giocare online con amici!</p>
-                <button onclick="alert('STEP 1: Toggle funziona! Prossimo step: Firebase')" style="padding: 15px 30px; font-size: 1.2em; background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer;">
+                <button onclick="alert('STEP 2: Firebase ' + (database ? 'FUNZIONA ✅' : 'NON funziona ❌'))" style="padding: 15px 30px; font-size: 1.2em; background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer;">
                     🎮 Crea Stanza
                 </button>
             </div>
@@ -751,6 +754,29 @@
 
         // Variabili modalità
         let isOnlineMode = false;
+
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBhmacedonia6z3kNrKtLZkaOcHfiD2XbmJE9r4",
+            authDomain: "tombola-romana.firebaseapp.com",
+            databaseURL: "https://tombola-romana-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "tombola-romana",
+            storageBucket: "tombola-romana.firebasestorage.app",
+            messagingSenderId: "970863494827",
+            appId: "1:970863494827:web:a8e3f42e5c8a40489ac4fb"
+        };
+
+        // Inizializza Firebase
+        let firebaseApp = null;
+        let database = null;
+
+        try {
+            firebaseApp = firebase.initializeApp(firebaseConfig);
+            database = firebase.database();
+            console.log('✅ Firebase inizializzato');
+        } catch (error) {
+            console.error('❌ Errore Firebase:', error);
+        }
 
         let giocoCorrente = {
             estratti: [],
