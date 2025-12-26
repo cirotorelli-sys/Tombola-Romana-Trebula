@@ -507,8 +507,29 @@
         <h1>🏛️ TOMBOLA ROMANA - BANCO 🏛️</h1>
         <div class="subtitle">Gestione Completa del Gioco</div>
 
+        <!-- TOGGLE MODALITÀ -->
+        <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; background: white; padding: 15px; border-radius: 10px;">
+            <button id="btnModeLocal" class="mode-btn active" onclick="switchMode('local')" style="flex: 1; padding: 15px; font-size: 1.1em; font-weight: bold; border: 3px solid #228B22; background: linear-gradient(135deg, #228B22 0%, #32CD32 100%); color: white; border-radius: 10px; cursor: pointer;">
+                💻 Modalità Locale
+            </button>
+            <button id="btnModeOnline" class="mode-btn" onclick="switchMode('online')" style="flex: 1; padding: 15px; font-size: 1.1em; font-weight: bold; border: 3px solid #ddd; background: #f5f5f5; color: #666; border-radius: 10px; cursor: pointer;">
+                🌐 Modalità Online
+            </button>
+        </div>
+
+        <!-- PANNELLO ONLINE (nascosto di default) -->
+        <div id="onlinePanel" style="display: none; background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+            <h2 style="color: #4A90E2; text-align: center; margin-bottom: 15px;">🌐 Modalità Online</h2>
+            <div style="text-align: center;">
+                <p style="color: #666; margin-bottom: 15px;">Crea una stanza per giocare online con amici!</p>
+                <button onclick="alert('STEP 1: Toggle funziona! Prossimo step: Firebase')" style="padding: 15px 30px; font-size: 1.2em; background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer;">
+                    🎮 Crea Stanza
+                </button>
+            </div>
+        </div>
+
         <!-- REGISTRAZIONE GIOCATORI -->
-        <div class="giocatori-section">
+        <div class="giocatori-section" id="localPanel">
             <div class="giocatori-header">
                 <h2 style="color: #228B22;">👥 Registrazione Giocatori</h2>
                 <div style="margin-top: 15px; padding: 15px; background: #FFF8DC; border-radius: 10px; border: 2px solid #D2691E;">
@@ -728,6 +749,9 @@
         const SIMBOLI = DATI_CARTELLE.simboli;
         const CARTELLE_PREDEFINITE = DATI_CARTELLE.cartelle;
 
+        // Variabili modalità
+        let isOnlineMode = false;
+
         let giocoCorrente = {
             estratti: [],
             inCorso: false,
@@ -740,6 +764,24 @@
             },
             giocatori: [] // [{nome: "Mario", cartella: 23}, ...]
         };
+
+        // Funzione toggle modalità
+        function switchMode(mode) {
+            isOnlineMode = (mode === 'online');
+            
+            // Aggiorna pulsanti
+            document.getElementById('btnModeLocal').style.border = (mode === 'local') ? '3px solid #228B22' : '3px solid #ddd';
+            document.getElementById('btnModeLocal').style.background = (mode === 'local') ? 'linear-gradient(135deg, #228B22 0%, #32CD32 100%)' : '#f5f5f5';
+            document.getElementById('btnModeLocal').style.color = (mode === 'local') ? 'white' : '#666';
+            
+            document.getElementById('btnModeOnline').style.border = (mode === 'online') ? '3px solid #4A90E2' : '3px solid #ddd';
+            document.getElementById('btnModeOnline').style.background = (mode === 'online') ? 'linear-gradient(135deg, #4A90E2 0%, #357ABD 100%)' : '#f5f5f5';
+            document.getElementById('btnModeOnline').style.color = (mode === 'online') ? 'white' : '#666';
+            
+            // Mostra/nascondi pannelli
+            document.getElementById('localPanel').style.display = (mode === 'local') ? 'block' : 'none';
+            document.getElementById('onlinePanel').style.display = (mode === 'online') ? 'block' : 'none';
+        }
 
         // Popola il select delle cartelle
         function popolaSelectCartelle() {
