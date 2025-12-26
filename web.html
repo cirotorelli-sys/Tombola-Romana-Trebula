@@ -892,6 +892,9 @@
                 document.getElementById('playersOnlineCount').textContent = '👥 Giocatori connessi: ' + count;
                 console.log('👥 Giocatori:', count);
                 
+                // Aggiorna stats con players online
+                aggiornaStats(players);
+                
                 // Mostra cartelle se il gioco è iniziato
                 if (giocoCorrente.inCorso) {
                     mostraCartelleOnline(players);
@@ -1512,8 +1515,14 @@
             console.log('✅ Pronto per nuova partita');
         }
 
-        function aggiornaStats() {
-            document.getElementById('numGiocatori').textContent = giocoCorrente.giocatori.length;
+        function aggiornaStats(onlinePlayers = null) {
+            // Se online e abbiamo players, usa quelli
+            if (isOnlineMode && onlinePlayers !== null) {
+                document.getElementById('numGiocatori').textContent = Object.keys(onlinePlayers).length;
+            } else {
+                // Altrimenti usa giocatori locali
+                document.getElementById('numGiocatori').textContent = giocoCorrente.giocatori.length;
+            }
             document.getElementById('numEstratti').textContent = `${giocoCorrente.estratti.length}/90`;
             document.getElementById('numRimasti').textContent = `${90 - giocoCorrente.estratti.length}`;
         }

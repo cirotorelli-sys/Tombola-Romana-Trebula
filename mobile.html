@@ -212,6 +212,26 @@
                 Giocatore: <strong id="displayNome"></strong>
             </p>
             
+            <!-- PANNELLO INFO LIVE -->
+            <div id="panelLive" style="background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+                                       padding: 15px; border-radius: 15px; margin-bottom: 15px;
+                                       border: 3px solid #2C5F8D; display: none;">
+                <div style="display: flex; justify-content: space-around; text-align: center; color: white;">
+                    <div>
+                        <div style="font-size: 0.9em; margin-bottom: 5px;">👥 Giocatori</div>
+                        <div id="mobilePlayersCount" style="font-size: 1.5em; font-weight: bold;">0</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.9em; margin-bottom: 5px;">🎲 Ultimo Numero</div>
+                        <div id="mobileLastNumber" style="font-size: 1.5em; font-weight: bold;">-</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.9em; margin-bottom: 5px;">📊 Estratti</div>
+                        <div id="mobileExtractedCount" style="font-size: 1.5em; font-weight: bold;">0/90</div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="cartella-grid" id="cartellaGrid"></div>
             
             <p style="text-align: center; color: #8B0000; font-weight: bold;">
@@ -396,9 +416,24 @@
         function ascoltaEstrazioni() {
             console.log('🎧 Inizio ascolto Firebase per stanza:', currentRoom);
             
+            // Mostra pannello live solo in online
+            document.getElementById('panelLive').style.display = 'block';
+            
             database.ref('rooms/' + currentRoom + '/extracted').on('value', snap => {
                 const estratti = snap.val() || [];
                 
+                // Aggiorna contatore estratti
+                document.getElementById('mobileExtractedCount').textContent = `${estratti.length}/90`;
+                
+                // Aggiorna ultimo numero estratto
+                if (estratti.length > 0) {
+                    const ultimoIdx = estratti[estratti.length - 1];
+                    document.getElementById('mobileLastNumber').textContent = ultimoIdx + 1;
+                } else {
+                    document.getElementById('mobileLastNumber').textContent = '-';
+                }
+                
+                // Segna numeri sulla cartella
                 document.querySelectorAll('.cella').forEach(cella => {
                     const idx = parseInt(cella.dataset.simbolo);
                     if (estratti.includes(idx)) {
@@ -407,7 +442,23 @@
                 });
             });
             
-            // Ascolta vincite
+            // Ascolta numero giocatori E se stanza chiusa
+            database.ref('rooms/' + currentRoom + '/players').on('value', snap => {
+                const players = snap.val() || {};
+                const count = Object.keys(players).length;
+                
+                // Aggiorna contatore
+                document.getElementById('mobilePlayersCount').textContent = count;
+                
+                // Controlla se stanza chiusa
+                if (count === 0) {
+                    if (sessionStorage.getItem('was_connected')) {
+                        mostraStanzaChiusa();
+                    }
+                } else {
+                    sessionStorage.setItem('was_connected', 'true');
+                }
+            });
             console.log('🏆 Listener vincite attivo');
             database.ref('rooms/' + currentRoom + '/gameState').on('value', snap => {
                 const gameState = snap.val();
@@ -441,18 +492,6 @@
                     console.log('✅ Mostro popup TOMBOLA');
                     sessionStorage.setItem('tombola_shown', 'true');
                     mostraPopupTombolaFinale(premi);
-                }
-            });
-            
-            // Ascolta se stanza chiusa
-            database.ref('rooms/' + currentRoom + '/players').on('value', snap => {
-                const players = snap.val();
-                if (!players || Object.keys(players).length === 0) {
-                    if (sessionStorage.getItem('was_connected')) {
-                        mostraStanzaChiusa();
-                    }
-                } else {
-                    sessionStorage.setItem('was_connected', 'true');
                 }
             });
         }
