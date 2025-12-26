@@ -906,7 +906,7 @@
                     console.log('✅ Curiosità Trebula caricate:', curiositaData.curiosita.length);
                 }
             } catch (error) {
-                console.log('ℹ️ File curiosita-trebula.json non trovato');
+                
             }
         }
         caricaCuriosita();
@@ -1069,7 +1069,7 @@
         
         function createRoom(){
             if(!database){alert("Firebase non configurato!");return}
-            console.log('🎮 createRoom() chiamata');
+            
             const e=generateRoomCode();
             currentRoom=e;
             isHost=!0;
@@ -1082,7 +1082,7 @@
             document.getElementById("roomInfo").style.display="block";
             document.getElementById("displayRoomCode").textContent=e;
             
-            console.log('📡 Attivo listener players...');
+            
             t.child("players").on("value",e=>{
                 console.log('📥 Listener players triggered!', e.val());
                 currentPlayersData = e.val()||{};
@@ -1090,7 +1090,7 @@
             });
             
             // Listener per extracted: aggiorna cartelle quando viene estratto un numero
-            console.log('📡 Attivo listener extracted...');
+            
             t.child("extracted").on("value",e=>{
                 console.log('📥 Listener extracted triggered!', e.val());
                 if(e.exists() && Object.keys(currentPlayersData).length > 0){
@@ -1122,28 +1122,86 @@
         function leaveRoom(){if(!currentRoom||!database)return;if(isHost){if(!confirm("Sei l'host! Uscire eliminerà la stanza. Confermi?"))return;database.ref("rooms/"+currentRoom).remove();console.log("🗑️ Stanza eliminata")}else myPlayerId&&database.ref("rooms/"+currentRoom+"/players/"+myPlayerId).remove();currentRoom=null;isHost=!1;myPlayerId=null;document.getElementById("roomInfo").style.display="none";document.getElementById("roomSelection").style.display="block";document.getElementById("onlinePlayersList").innerHTML="";document.getElementById("playerCount").textContent="0";console.log("🚪 Stanza lasciata")}
         
         function updateOnlinePlayersList(players) {
-            console.log('🔄 updateOnlinePlayersList() chiamata', players);
-            console.log('   isOnlineMode:', isOnlineMode);
-            console.log('   Numero giocatori:', Object.keys(players).length);
-            
             const container = document.getElementById("onlinePlayersList");
             const count = Object.keys(players).length;
             document.getElementById("playerCount").textContent = count;
             
             if (count === 0) {
-                console.log('   ⚠️ Nessun giocatore');
-                container.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">Nessun giocatore</p>';
-                // Svuota griglia cartelle SOLO se in modalità Online
-                if (isOnlineMode) {
-                    console.log('   📋 Svuoto cartelleGrid (nessun giocatore)');
-                    document.getElementById('cartelleGrid').innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px;">Nessuna cartella in gioco. Aspetta che i giocatori si connettano.</div>';
-                }
+                container.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">Nessun giocatore connesso</p>';
+                // Svuota griglia cartelle
+                document.getElementById('cartelleGrid').innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px;">Nessuna cartella in gioco. Aspetta che i giocatori si connettano.</div>';
                 return;
             }
             
-            console.log('   ✅ Chiamo mostraCartelleOnline()');
-            // MOSTRA CARTELLE NELLA GRIGLIA PRINCIPALE
+            // MOSTRA CARTELLE NELLA GRIGLIA PRINCIPALE (sotto il tabellone)
             mostraCartelleOnline(players);
+            
+            // PANNELLO LATERALE: Solo lista compatta nome + premi
+            let html = '';
+            Object.entries(players).forEach(([playerId, player]) => {
+                const cartella = CARTELLE_PREDEFINITE[player.cartella - 1];
+                
+                // Calcola premi
+                const riga1 = cartella.slice(0, 5).filter(idx => giocoCorrente.estratti.includes(idx)).length;
+                const riga2 = cartella.slice(5, 10).filter(idx => giocoCorrente.estratti.includes(idx)).length;
+                const riga3 = cartella.slice(10, 15).filter(idx => giocoCorrente.estratti.includes(idx)).length;
+                const maxRiga = Math.max(riga1, riga2, riga3);
+                const righeComplete = [riga1, riga2, riga3].filter(r => r === 5).length;
+                
+                let premi = [];
+                let currentAwards = [];
+                if (maxRiga >= 2) { premi.push('🎯 Ambo'); currentAwards.push('ambo'); }
+                if (maxRiga >= 3) { premi.push('🎯🎯 Terno'); currentAwards.push('terno'); }
+                if (maxRiga >= 4) { premi.push('🎯🎯🎯 Quaterna'); currentAwards.push('quaterna'); }
+                if (maxRiga >= 5) { premi.push('🎯🎯🎯🎯 Cinquina'); currentAwards.push('cinquina'); }
+                if (righeComplete === 3) { premi.push('🎊 TOMBOLA!'); currentAwards.push('tombola'); }
+                
+                // Popup per nuovi premi
+                if (!playersPreviousAwards[playerId]) {
+                    playersPreviousAwards[playerId] = [];
+                }
+                
+                currentAwards.forEach(award => {
+                    if (!playersPreviousAwards[playerId].includes(award)) {
+                        playersPreviousAwards[playerId].push(award);
+                        const awardNames = {
+                            'ambo': '🎯 AMBO',
+                            'terno': '🎯🎯 TERNO',
+                            'quaterna': '🎯🎯🎯 QUATERNA',
+                            'cinquina': '🎯🎯🎯🎯 CINQUINA',
+                            'tombola': '🎊 TOMBOLA! 🎊'
+                        };
+                        setTimeout(() => {
+                            alert(`${awardNames[award]}\n\n👤 ${player.name}\n📋 Cartella ${player.cartella}`);
+                            if (award === 'tombola') {
+                                suonoTombola();
+                            } else {
+                                suonoVittoria();
+                            }
+                        }, 100);
+                    }
+                });
+                
+                // Lista compatta per pannello laterale
+                html += `
+                    <div style="background: white; border-radius: 8px; padding: 12px; margin: 8px 0; border-left: 4px solid ${righeComplete === 3 ? '#FFD700' : '#4A90E2'};">
+                        <div style="font-weight: bold; color: #333; margin-bottom: 5px;">
+                            👤 ${player.name}
+                        </div>
+                        <div style="font-size: 0.9em; color: #666;">
+                            📋 Cartella ${player.cartella}
+                        </div>
+                        ${premi.length > 0 ? `
+                        <div style="margin-top: 8px; padding: 5px; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); border-radius: 5px; font-size: 0.85em; font-weight: bold; text-align: center;">
+                            ${premi.join(' ')}
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
             
             let html = '';
             Object.entries(players).forEach(([playerId, player]) => {
@@ -1246,23 +1304,16 @@
             container.innerHTML = html;
         }
         
-        // NUOVA FUNZIONE: Mostra cartelle online nella griglia principale
+        // FUNZIONE: Mostra cartelle online nella griglia principale
         function mostraCartelleOnline(players) {
-            // IMPORTANTE: Funziona solo in modalità Online!
-            if (!isOnlineMode) {
-                console.log('⏭️ Skip mostraCartelleOnline (modalità locale)');
-                return;
-            }
-            
-            console.log('🔍 mostraCartelleOnline chiamata', players);
             const container = document.getElementById('cartelleGrid');
             if (!container) {
-                console.error('❌ Container cartelleGrid non trovato!');
+                
                 return;
             }
             
             if (!SIMBOLI || !CARTELLE_PREDEFINITE) {
-                console.error('❌ SIMBOLI o CARTELLE_PREDEFINITE non definiti!');
+                
                 return;
             }
             
@@ -1274,7 +1325,6 @@
             }
             
             Object.entries(players).forEach(([playerId, player]) => {
-                console.log(`📋 Cartella ${player.cartella} per ${player.name}`);
                 const numeroCartella = player.cartella;
                 const simboliCartella = CARTELLE_PREDEFINITE[numeroCartella - 1];
                 
@@ -1320,14 +1370,11 @@
                     const isSegnato = giocoCorrente.estratti && giocoCorrente.estratti.includes(simboloIndex);
                     if (isSegnato) {
                         cella.classList.add('segnato');
-                        console.log(`✅ Numero ${simboloIndex + 1} segnato su cartella ${numeroCartella}`);
                     }
                     
                     grid.appendChild(cella);
                 });
             });
-            
-            console.log('✅ Cartelle online create');
         }
         
         function syncExtractedNumbers(e){if(!Array.isArray(e))return;e.forEach(t=>{if(!giocoCorrente.estratti.includes(t)){giocoCorrente.estratti.push(t);const a=SIMBOLI[t],o=document.getElementById(`simbolo-${t}`);o&&o.classList.add("estratto");if(e[e.length-1]===t){document.getElementById("currentExtraction").innerHTML=`\n                            <div style="font-size: 1.2em; font-weight: bold; color: #8B0000; margin-bottom: 5px;">${t+1}</div>\n                            <div style="font-size: 2.5em;">${a.icona}</div>\n                            <div style="font-size: 0.8em; margin-top: 10px; font-weight: bold;">${a.nome}</div>\n                        `;suonoEstrazione()}segnaSuCartelle(t)}});aggiornaStats()}function syncGameState(e){e&&(giocoCorrente.inCorso=e.inCorso||!1,giocoCorrente.premiVinti=e.premiVinti||{ambo:null,terno:null,quaterna:null,cinquina:null,tombola:null})}function publishExtraction(e){if(!isOnlineMode||!isHost||!currentRoom||!database)return;const t=database.ref("rooms/"+currentRoom);t.child("extracted").once("value",a=>{const o=a.val()||[];o.includes(e)||(o.push(e),t.child("extracted").set(o),console.log("📡 Pubblicato:",e+1))})}function publishGameState(){isOnlineMode&&isHost&&currentRoom&&database&&(database.ref("rooms/"+currentRoom+"/gameState").set({inCorso:giocoCorrente.inCorso,premiVinti:giocoCorrente.premiVinti}),console.log("📡 Stato pubblicato"))}
@@ -1460,7 +1507,7 @@
             // Attiva/disattiva curiosità
             curiositaAttive = document.getElementById('toggleCuriosita').checked;
             if (curiositaAttive) {
-                console.log('🏛️ Curiosità Trebula ATTIVE');
+                
             }
 
             giocoCorrente.estratti = [];
