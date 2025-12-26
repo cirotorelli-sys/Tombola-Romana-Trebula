@@ -4,6 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Banco - Tombola Romana</title>
+    
+    <!-- REDIRECT AUTOMATICO PER MOBILE -->
+    <script>
+        // Rileva se è un dispositivo mobile
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isSmallScreen = window.innerWidth < 768;
+        
+        // Se mobile E non è già su mobile.html, reindirizza
+        if ((isMobile || isSmallScreen) && !window.location.pathname.includes('mobile.html')) {
+            const baseUrl = window.location.href.replace(/\/[^\/]*$/, '');
+            window.location.href = baseUrl + '/mobile.html';
+        }
+    </script>
+    
     <style>
         * {
             margin: 0;
