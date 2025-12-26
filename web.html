@@ -1045,6 +1045,22 @@
                 tombola: null
             };
             
+            // Reset Firebase se online
+            if (isOnlineMode && currentRoom) {
+                database.ref('rooms/' + currentRoom + '/extracted').set([]);
+                database.ref('rooms/' + currentRoom + '/gameState').set({
+                    inCorso: true,
+                    premiVinti: {
+                        ambo: null,
+                        terno: null,
+                        quaterna: null,
+                        cinquina: null,
+                        tombola: null
+                    }
+                });
+                console.log('🔄 Firebase inizializzato per nuova partita');
+            }
+            
             document.getElementById('btnEstrai').disabled = false;
             document.getElementById('currentExtraction').innerHTML = 'Pronto per estrarre!';
             document.getElementById('extractionHistory').innerHTML = '';
@@ -1413,23 +1429,43 @@
                     tombola: null
                 };
                 
+                // Reset Firebase se online
+                if (isOnlineMode && currentRoom) {
+                    database.ref('rooms/' + currentRoom + '/extracted').set([]);
+                    database.ref('rooms/' + currentRoom + '/gameState').set({
+                        inCorso: false,
+                        premiVinti: {
+                            ambo: null,
+                            terno: null,
+                            quaterna: null,
+                            cinquina: null,
+                            tombola: null
+                        }
+                    });
+                    console.log('🔄 Firebase resettato');
+                }
+                
                 document.getElementById('btnEstrai').disabled = true;
                 document.getElementById('currentExtraction').innerHTML = 
                     'Registra i giocatori e premi "Inizia Partita"';
                 document.getElementById('extractionHistory').innerHTML = '';
                 
+                // Reset tabellone
                 document.querySelectorAll('.simbolo').forEach(el => {
                     el.classList.remove('estratto');
                 });
                 
-                if (giocoCorrente.giocatori.length > 0) {
-                    mostraCartelleInGioco();
-                    document.querySelectorAll('.cartella-cella').forEach(el => {
-                        el.classList.remove('segnato');
-                    });
-                }
+                // Reset cartelle
+                document.getElementById('cartelleGrid').innerHTML = '';
+                
+                // Rimuovi numeri segnati se ci sono cartelle
+                document.querySelectorAll('.cartella-cella').forEach(el => {
+                    el.classList.remove('segnato');
+                });
                 
                 aggiornaStats();
+                
+                console.log('✅ Gioco resettato');
             }
         }
 
