@@ -379,7 +379,11 @@
                 const cella = document.createElement('div');
                 cella.className = 'cella';
                 cella.dataset.simbolo = idx;
-                cella.innerHTML = `<div class="icona">${simbolo.icona}</div><div class="nome">${simbolo.nome}</div>`;
+                cella.innerHTML = `
+                    <div style="font-size: 0.9em; font-weight: bold; color: #8B0000;">${idx + 1}</div>
+                    <div class="icona">${simbolo.icona}</div>
+                    <div class="nome">${simbolo.nome}</div>
+                `;
                 grid.appendChild(cella);
             });
         }
