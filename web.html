@@ -980,7 +980,8 @@
         }
 
         function iniziaGioco() {
-            if (giocoCorrente.giocatori.length === 0) {
+            // In modalità Online NON serve registrare giocatori localmente
+            if (!isOnlineMode && giocoCorrente.giocatori.length === 0) {
                 alert('⚠️ Devi prima registrare almeno un giocatore!');
                 return;
             }
@@ -1082,6 +1083,12 @@
             
             segnaSuCartelle(index);
             aggiornaStats();
+            
+            // Pubblica su Firebase se online
+            if (isOnlineMode && currentRoom) {
+                database.ref('rooms/' + currentRoom + '/extracted').set(giocoCorrente.estratti);
+                console.log('📡 Pubblicato su Firebase:', index);
+            }
             
             // Suono estrazione
             suonoEstrazione();
