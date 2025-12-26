@@ -1196,6 +1196,15 @@
                 // TOMBOLA
                 if (numSegnate === 15 && !giocoCorrente.premiVinti.tombola) {
                     giocoCorrente.premiVinti.tombola = {nome: nomeGiocatore, cartella: numeroCartella};
+                    
+                    // Pubblica TUTTI i premi su Firebase se online (per riepilogo mobile)
+                    if (isOnlineMode && currentRoom) {
+                        database.ref('rooms/' + currentRoom + '/gameState/premiVinti/tombola').set({
+                            nome: nomeGiocatore,
+                            cartella: numeroCartella
+                        });
+                    }
+                    
                     mostraVittoriaFinale();
                     return;
                 }
@@ -1204,6 +1213,15 @@
                 if (!giocoCorrente.premiVinti.cinquina && numSegnate >= 5) {
                     if (controllaRigaCompleta(cartellaDiv)) {
                         giocoCorrente.premiVinti.cinquina = {nome: nomeGiocatore, cartella: numeroCartella};
+                        
+                        // Pubblica su Firebase se online
+                        if (isOnlineMode && currentRoom) {
+                            database.ref('rooms/' + currentRoom + '/gameState/premiVinti/cinquina').set({
+                                nome: nomeGiocatore,
+                                cartella: numeroCartella
+                            });
+                        }
+                        
                         mostraVittoria(`🎊 CINQUINA! 🎊<br>${nomeGiocatore}<br>Cartella ${numeroCartella}`);
                         return;
                     }
@@ -1213,6 +1231,15 @@
                 if (!giocoCorrente.premiVinti.quaterna && numSegnate >= 4) {
                     if (controllaRiga(cartellaDiv, 4)) {
                         giocoCorrente.premiVinti.quaterna = {nome: nomeGiocatore, cartella: numeroCartella};
+                        
+                        // Pubblica su Firebase se online
+                        if (isOnlineMode && currentRoom) {
+                            database.ref('rooms/' + currentRoom + '/gameState/premiVinti/quaterna').set({
+                                nome: nomeGiocatore,
+                                cartella: numeroCartella
+                            });
+                        }
+                        
                         mostraVittoria(`🎯 QUATERNA! 🎯<br>${nomeGiocatore}<br>Cartella ${numeroCartella}`);
                         return;
                     }
@@ -1222,6 +1249,15 @@
                 if (!giocoCorrente.premiVinti.terno && numSegnate >= 3) {
                     if (controllaRiga(cartellaDiv, 3)) {
                         giocoCorrente.premiVinti.terno = {nome: nomeGiocatore, cartella: numeroCartella};
+                        
+                        // Pubblica su Firebase se online
+                        if (isOnlineMode && currentRoom) {
+                            database.ref('rooms/' + currentRoom + '/gameState/premiVinti/terno').set({
+                                nome: nomeGiocatore,
+                                cartella: numeroCartella
+                            });
+                        }
+                        
                         mostraVittoria(`🎪 TERNO! 🎪<br>${nomeGiocatore}<br>Cartella ${numeroCartella}`);
                         return;
                     }
@@ -1231,6 +1267,15 @@
                 if (!giocoCorrente.premiVinti.ambo && numSegnate >= 2) {
                     if (controllaRiga(cartellaDiv, 2)) {
                         giocoCorrente.premiVinti.ambo = {nome: nomeGiocatore, cartella: numeroCartella};
+                        
+                        // Pubblica su Firebase se online
+                        if (isOnlineMode && currentRoom) {
+                            database.ref('rooms/' + currentRoom + '/gameState/premiVinti/ambo').set({
+                                nome: nomeGiocatore,
+                                cartella: numeroCartella
+                            });
+                        }
+                        
                         mostraVittoria(`🎲 AMBO! 🎲<br>${nomeGiocatore}<br>Cartella ${numeroCartella}`);
                         return;
                     }

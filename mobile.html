@@ -325,6 +325,52 @@
                     mostraPopupTombolaFinale(premi);
                 }
             });
+            
+            // Ascolta se stanza viene chiusa/resettata
+            database.ref('rooms/' + currentRoom + '/players').on('value', snap => {
+                const players = snap.val();
+                // Se players è vuoto o null, la stanza è stata resettata
+                if (!players || Object.keys(players).length === 0) {
+                    if (sessionStorage.getItem('was_connected')) {
+                        mostraStanzaChiusa();
+                    }
+                } else {
+                    sessionStorage.setItem('was_connected', 'true');
+                }
+            });
+        }
+        
+        // Stanza chiusa
+        function mostraStanzaChiusa() {
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.9); display: flex; align-items: center;
+                justify-content: center; z-index: 10000;
+            `;
+            
+            overlay.innerHTML = `
+                <div style="background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
+                            padding: 40px; border-radius: 20px; text-align: center;
+                            border: 5px solid #FFD700; box-shadow: 0 0 50px rgba(255,215,0,0.8);
+                            max-width: 90%; color: white;">
+                    <div style="font-size: 2.5em; margin-bottom: 20px;">⚠️</div>
+                    <div style="font-size: 1.8em; margin-bottom: 20px;">Stanza Chiusa</div>
+                    <div style="font-size: 1.2em; margin-bottom: 30px;">
+                        Il banco ha terminato la partita.<br>
+                        Ricarica la pagina per giocare di nuovo!
+                    </div>
+                    <button onclick="location.reload()" 
+                            style="padding: 20px 50px; font-size: 1.5em;
+                                   background: #FFD700; color: #8B0000; border: none;
+                                   border-radius: 15px; cursor: pointer; font-weight: bold;
+                                   box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                        🔄 Ricarica
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(overlay);
         }
         
         // Mostra popup vincita
