@@ -1090,8 +1090,13 @@
             
             if (count === 0) {
                 container.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">Nessun giocatore</p>';
+                // Svuota anche la griglia cartelle
+                document.getElementById('cartelleGrid').innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px;">Nessuna cartella in gioco.</div>';
                 return;
             }
+            
+            // MOSTRA CARTELLE NELLA GRIGLIA PRINCIPALE
+            mostraCartelleOnline(players);
             
             let html = '';
             Object.entries(players).forEach(([playerId, player]) => {
@@ -1132,6 +1137,12 @@
                         };
                         setTimeout(() => {
                             alert(`${awardNames[award]}\n\n👤 ${player.name}\n📋 Cartella ${player.cartella}`);
+                            // Suono vittoria
+                            if (award === 'tombola') {
+                                suonoTombola();
+                            } else {
+                                suonoVittoria();
+                            }
                         }, 100);
                     }
                 });
@@ -1186,6 +1197,43 @@
             });
             
             container.innerHTML = html;
+        }
+        
+        // NUOVA FUNZIONE: Mostra cartelle online nella griglia principale
+        function mostraCartelleOnline(players) {
+            const container = document.getElementById('cartelleGrid');
+            container.innerHTML = '';
+            
+            Object.entries(players).forEach(([playerId, player]) => {
+                const numeroCartella = player.cartella;
+                const simboliCartella = CARTELLE_PREDEFINITE[numeroCartella - 1];
+                
+                const cartellaDiv = document.createElement('div');
+                cartellaDiv.className = 'cartella';
+                cartellaDiv.innerHTML = `
+                    <div class="cartella-header">${player.name} - Cartella ${numeroCartella}</div>
+                    <div class="cartella-grid-cella" id="cartella-online-${playerId}"></div>
+                `;
+                container.appendChild(cartellaDiv);
+                
+                const grid = document.getElementById(`cartella-online-${playerId}`);
+                simboliCartella.forEach(simboloIndex => {
+                    const simbolo = SIMBOLI[simboloIndex];
+                    const cella = document.createElement('div');
+                    cella.className = 'cartella-cella';
+                    cella.dataset.simbolo = simboloIndex;
+                    cella.innerHTML = `
+                        <div class="cartella-cella-icona">${simbolo.icona}</div>
+                        <div class="cartella-cella-nome">${simbolo.nome}</div>
+                    `;
+                    
+                    if (giocoCorrente.estratti.includes(simboloIndex)) {
+                        cella.classList.add('segnato');
+                    }
+                    
+                    grid.appendChild(cella);
+                });
+            });
         }
         
         function syncExtractedNumbers(e){if(!Array.isArray(e))return;e.forEach(t=>{if(!giocoCorrente.estratti.includes(t)){giocoCorrente.estratti.push(t);const a=SIMBOLI[t],o=document.getElementById(`simbolo-${t}`);o&&o.classList.add("estratto");if(e[e.length-1]===t){document.getElementById("currentExtraction").innerHTML=`\n                            <div style="font-size: 1.2em; font-weight: bold; color: #8B0000; margin-bottom: 5px;">${t+1}</div>\n                            <div style="font-size: 2.5em;">${a.icona}</div>\n                            <div style="font-size: 0.8em; margin-top: 10px; font-weight: bold;">${a.nome}</div>\n                        `;suonoEstrazione()}segnaSuCartelle(t)}});aggiornaStats()}function syncGameState(e){e&&(giocoCorrente.inCorso=e.inCorso||!1,giocoCorrente.premiVinti=e.premiVinti||{ambo:null,terno:null,quaterna:null,cinquina:null,tombola:null})}function publishExtraction(e){if(!isOnlineMode||!isHost||!currentRoom||!database)return;const t=database.ref("rooms/"+currentRoom);t.child("extracted").once("value",a=>{const o=a.val()||[];o.includes(e)||(o.push(e),t.child("extracted").set(o),console.log("📡 Pubblicato:",e+1))})}function publishGameState(){isOnlineMode&&isHost&&currentRoom&&database&&(database.ref("rooms/"+currentRoom+"/gameState").set({inCorso:giocoCorrente.inCorso,premiVinti:giocoCorrente.premiVinti}),console.log("📡 Stato pubblicato"))}
