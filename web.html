@@ -1067,20 +1067,41 @@
         
         let currentPlayersData = {}; // Store per aggiornamenti cartelle
         
-        function createRoom(){if(!database){alert("Firebase non configurato!");return}const e=generateRoomCode();currentRoom=e;isHost=!0;const t=database.ref("rooms/"+e);t.set({host:"Banco",createdAt:Date.now(),players:{},extracted:[],gameState:{inCorso:!1,premiVinti:{ambo:null,terno:null,quaterna:null,cinquina:null,tombola:null}}});document.getElementById("roomSelection").style.display="none";document.getElementById("roomInfo").style.display="block";document.getElementById("displayRoomCode").textContent=e;
-        t.child("players").on("value",e=>{
-            currentPlayersData = e.val()||{};
-            updateOnlinePlayersList(currentPlayersData);
-        });
-        // Listener per extracted: aggiorna cartelle quando viene estratto un numero
-        t.child("extracted").on("value",e=>{
-            if(e.exists() && Object.keys(currentPlayersData).length > 0){
-                syncExtractedNumbers(e.val());
-                // Riaggiorna cartelle per mostrare numeri segnati
-                mostraCartelleOnline(currentPlayersData);
-            }
-        });
-        console.log("🎮 Stanza creata:",e);alert("✅ Stanza creata!\n\nCodice: "+e+"\n\nCondividi con i giocatori!")}
+        function createRoom(){
+            if(!database){alert("Firebase non configurato!");return}
+            console.log('🎮 createRoom() chiamata');
+            const e=generateRoomCode();
+            currentRoom=e;
+            isHost=!0;
+            console.log('✅ isOnlineMode:', isOnlineMode);
+            console.log('✅ isHost:', isHost);
+            
+            const t=database.ref("rooms/"+e);
+            t.set({host:"Banco",createdAt:Date.now(),players:{},extracted:[],gameState:{inCorso:!1,premiVinti:{ambo:null,terno:null,quaterna:null,cinquina:null,tombola:null}}});
+            document.getElementById("roomSelection").style.display="none";
+            document.getElementById("roomInfo").style.display="block";
+            document.getElementById("displayRoomCode").textContent=e;
+            
+            console.log('📡 Attivo listener players...');
+            t.child("players").on("value",e=>{
+                console.log('📥 Listener players triggered!', e.val());
+                currentPlayersData = e.val()||{};
+                updateOnlinePlayersList(currentPlayersData);
+            });
+            
+            // Listener per extracted: aggiorna cartelle quando viene estratto un numero
+            console.log('📡 Attivo listener extracted...');
+            t.child("extracted").on("value",e=>{
+                console.log('📥 Listener extracted triggered!', e.val());
+                if(e.exists() && Object.keys(currentPlayersData).length > 0){
+                    syncExtractedNumbers(e.val());
+                    // Riaggiorna cartelle per mostrare numeri segnati
+                    mostraCartelleOnline(currentPlayersData);
+                }
+            });
+            console.log("🎮 Stanza creata:",e);alert("✅ Stanza creata!\n\nCodice: "+e+"\n\nCondividi con i giocatori!")
+        }
+
         
         let tempRoomCode=null;let tempRoomData=null;
         
@@ -1101,17 +1122,26 @@
         function leaveRoom(){if(!currentRoom||!database)return;if(isHost){if(!confirm("Sei l'host! Uscire eliminerà la stanza. Confermi?"))return;database.ref("rooms/"+currentRoom).remove();console.log("🗑️ Stanza eliminata")}else myPlayerId&&database.ref("rooms/"+currentRoom+"/players/"+myPlayerId).remove();currentRoom=null;isHost=!1;myPlayerId=null;document.getElementById("roomInfo").style.display="none";document.getElementById("roomSelection").style.display="block";document.getElementById("onlinePlayersList").innerHTML="";document.getElementById("playerCount").textContent="0";console.log("🚪 Stanza lasciata")}
         
         function updateOnlinePlayersList(players) {
+            console.log('🔄 updateOnlinePlayersList() chiamata', players);
+            console.log('   isOnlineMode:', isOnlineMode);
+            console.log('   Numero giocatori:', Object.keys(players).length);
+            
             const container = document.getElementById("onlinePlayersList");
             const count = Object.keys(players).length;
             document.getElementById("playerCount").textContent = count;
             
             if (count === 0) {
+                console.log('   ⚠️ Nessun giocatore');
                 container.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">Nessun giocatore</p>';
-                // Svuota anche la griglia cartelle
-                document.getElementById('cartelleGrid').innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px;">Nessuna cartella in gioco.</div>';
+                // Svuota griglia cartelle SOLO se in modalità Online
+                if (isOnlineMode) {
+                    console.log('   📋 Svuoto cartelleGrid (nessun giocatore)');
+                    document.getElementById('cartelleGrid').innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px;">Nessuna cartella in gioco. Aspetta che i giocatori si connettano.</div>';
+                }
                 return;
             }
             
+            console.log('   ✅ Chiamo mostraCartelleOnline()');
             // MOSTRA CARTELLE NELLA GRIGLIA PRINCIPALE
             mostraCartelleOnline(players);
             
