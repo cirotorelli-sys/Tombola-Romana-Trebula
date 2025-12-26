@@ -1063,7 +1063,24 @@
             }
             
             "local"===e&&currentRoom&&leaveRoom()
-        }function updateConnectionStatus(e){const t=document.getElementById("connectionStatus");t&&(t.className="online-status "+(e?"connected":"disconnected"))}function createRoom(){if(!database){alert("Firebase non configurato!");return}const e=generateRoomCode();currentRoom=e;isHost=!0;const t=database.ref("rooms/"+e);t.set({host:"Banco",createdAt:Date.now(),players:{},extracted:[],gameState:{inCorso:!1,premiVinti:{ambo:null,terno:null,quaterna:null,cinquina:null,tombola:null}}});document.getElementById("roomSelection").style.display="none";document.getElementById("roomInfo").style.display="block";document.getElementById("displayRoomCode").textContent=e;t.child("players").on("value",e=>{updateOnlinePlayersList(e.val()||{})});console.log("🎮 Stanza creata:",e);alert("✅ Stanza creata!\n\nCodice: "+e+"\n\nCondividi con i giocatori!")}
+        }function updateConnectionStatus(e){const t=document.getElementById("connectionStatus");t&&(t.className="online-status "+(e?"connected":"disconnected"))}
+        
+        let currentPlayersData = {}; // Store per aggiornamenti cartelle
+        
+        function createRoom(){if(!database){alert("Firebase non configurato!");return}const e=generateRoomCode();currentRoom=e;isHost=!0;const t=database.ref("rooms/"+e);t.set({host:"Banco",createdAt:Date.now(),players:{},extracted:[],gameState:{inCorso:!1,premiVinti:{ambo:null,terno:null,quaterna:null,cinquina:null,tombola:null}}});document.getElementById("roomSelection").style.display="none";document.getElementById("roomInfo").style.display="block";document.getElementById("displayRoomCode").textContent=e;
+        t.child("players").on("value",e=>{
+            currentPlayersData = e.val()||{};
+            updateOnlinePlayersList(currentPlayersData);
+        });
+        // Listener per extracted: aggiorna cartelle quando viene estratto un numero
+        t.child("extracted").on("value",e=>{
+            if(e.exists() && Object.keys(currentPlayersData).length > 0){
+                syncExtractedNumbers(e.val());
+                // Riaggiorna cartelle per mostrare numeri segnati
+                mostraCartelleOnline(currentPlayersData);
+            }
+        });
+        console.log("🎮 Stanza creata:",e);alert("✅ Stanza creata!\n\nCodice: "+e+"\n\nCondividi con i giocatori!")}
         
         let tempRoomCode=null;let tempRoomData=null;
         
