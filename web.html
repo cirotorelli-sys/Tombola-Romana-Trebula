@@ -1158,11 +1158,8 @@
                 database.ref('rooms/' + currentRoom + '/extracted').set(giocoCorrente.estratti);
                 console.log('📡 Pubblicato su Firebase:', index);
                 
-                // Ricarica cartelle per aggiornare numeri segnati
-                database.ref('rooms/' + currentRoom + '/players').once('value').then(snap => {
-                    const players = snap.val() || {};
-                    mostraCartelleOnline(players);
-                });
+                // NON ricaricare tutto! Solo aggiorna i numeri segnati
+                // mostraCartelleOnline() viene chiamato solo da iniziaGioco()
             }
             
             // Suono estrazione
