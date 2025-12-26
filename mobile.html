@@ -245,13 +245,13 @@
         // Vai a selezione cartelle LOCALE
         function vaiACartelleLocale() {
             document.getElementById('paginaJoin').style.display = 'none';
-            document.getElementById('paginaCartelle').style.display = 'block';
+            document.getElementById('paginaSelezione').style.display = 'block';
             mostraGrigliaCartelleLocale();
         }
         
         // Mostra griglia 90 cartelle per LOCALE
         function mostraGrigliaCartelleLocale() {
-            const grid = document.getElementById('cartelleGrid');
+            const grid = document.getElementById('gridCartelle'); // ← ID CORRETTO
             grid.innerHTML = '';
             
             for (let i = 1; i <= 90; i++) {
@@ -268,7 +268,7 @@
             playerCartella = numero;
             playerName = "Giocatore"; // Nome default in locale
             
-            document.getElementById('paginaCartelle').style.display = 'none';
+            document.getElementById('paginaSelezione').style.display = 'none';
             document.getElementById('paginaCartella').style.display = 'block';
             
             document.getElementById('numeroCartella').textContent = numero;
