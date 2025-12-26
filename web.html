@@ -523,11 +523,24 @@
         <!-- PANNELLO ONLINE (nascosto di default) -->
         <div id="onlinePanel" style="display: none; background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
             <h2 style="color: #4A90E2; text-align: center; margin-bottom: 15px;">🌐 Modalità Online</h2>
-            <div style="text-align: center;">
+            
+            <!-- PRIMA DI CREARE -->
+            <div id="onlinePre" style="text-align: center;">
                 <p style="color: #666; margin-bottom: 15px;">Crea una stanza per giocare online con amici!</p>
                 <button onclick="createRoom()" style="padding: 15px 30px; font-size: 1.2em; background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer;">
                     🎮 Crea Stanza
                 </button>
+            </div>
+            
+            <!-- DOPO CREAZIONE -->
+            <div id="onlinePost" style="display: none; text-align: center;">
+                <h3 style="color: #228B22; margin-bottom: 10px;">✅ Stanza Creata!</h3>
+                <div style="background: #FFF8DC; border: 3px solid #4A90E2; border-radius: 15px; padding: 20px; margin: 15px 0;">
+                    <p style="color: #654321; margin-bottom: 5px; font-weight: bold;">Codice Stanza:</p>
+                    <p id="displayRoomCode" style="font-size: 2.5em; font-weight: bold; color: #8B0000; letter-spacing: 5px; margin: 10px 0;">------</p>
+                    <p style="color: #666; font-size: 0.9em;">Condividi questo codice con i giocatori!</p>
+                </div>
+                <p id="playersOnlineCount" style="color: #4A90E2; font-weight: bold; margin-top: 15px;">👥 Giocatori connessi: 0</p>
             </div>
         </div>
 
@@ -852,7 +865,19 @@
             });
 
             console.log('🎮 Stanza creata:', roomCode);
-            alert('✅ Stanza creata!\n\nCodice: ' + roomCode + '\n\nCondividi con i giocatori!');
+            
+            // Aggiorna interfaccia
+            document.getElementById('onlinePre').style.display = 'none';
+            document.getElementById('onlinePost').style.display = 'block';
+            document.getElementById('displayRoomCode').textContent = roomCode;
+            
+            // Listener giocatori
+            roomRef.child('players').on('value', snap => {
+                const players = snap.val() || {};
+                const count = Object.keys(players).length;
+                document.getElementById('playersOnlineCount').textContent = '👥 Giocatori connessi: ' + count;
+                console.log('👥 Giocatori:', count);
+            });
         }
 
         // Popola il select delle cartelle
