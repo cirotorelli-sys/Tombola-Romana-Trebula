@@ -877,6 +877,49 @@
                 const count = Object.keys(players).length;
                 document.getElementById('playersOnlineCount').textContent = '👥 Giocatori connessi: ' + count;
                 console.log('👥 Giocatori:', count);
+                
+                // Mostra cartelle se il gioco è iniziato
+                if (giocoCorrente.inCorso) {
+                    mostraCartelleOnline(players);
+                }
+            });
+        }
+
+        // Mostra cartelle giocatori online
+        function mostraCartelleOnline(players) {
+            const container = document.getElementById('cartelleGrid');
+            container.innerHTML = '';
+
+            Object.entries(players).forEach(([playerId, player]) => {
+                const numeroCartella = player.cartella;
+                const simboliCartella = CARTELLE_PREDEFINITE[numeroCartella - 1];
+
+                const cartellaDiv = document.createElement('div');
+                cartellaDiv.className = 'cartella';
+                cartellaDiv.innerHTML = `
+                    <div class="cartella-header">${player.name} - Cartella ${numeroCartella}</div>
+                    <div class="cartella-grid-cella" id="cartella-${playerId}"></div>
+                `;
+                container.appendChild(cartellaDiv);
+
+                const grid = document.getElementById(`cartella-${playerId}`);
+                simboliCartella.forEach(simboloIndex => {
+                    const simbolo = SIMBOLI[simboloIndex];
+                    const cella = document.createElement('div');
+                    cella.className = 'cartella-cella';
+                    cella.dataset.simbolo = simboloIndex;
+                    cella.dataset.player = playerId;
+                    cella.innerHTML = `
+                        <div class="cartella-cella-icona">${simbolo.icona}</div>
+                        <div class="cartella-cella-nome">${simbolo.nome}</div>
+                    `;
+                    
+                    if (giocoCorrente.estratti.includes(simboloIndex)) {
+                        cella.classList.add('segnato');
+                    }
+                    
+                    grid.appendChild(cella);
+                });
             });
         }
 
@@ -1011,7 +1054,17 @@
                 el.classList.remove('estratto');
             });
             
-            mostraCartelleInGioco();
+            // Mostra cartelle
+            if (isOnlineMode && currentRoom) {
+                // Carica cartelle da Firebase
+                database.ref('rooms/' + currentRoom + '/players').once('value').then(snap => {
+                    const players = snap.val() || {};
+                    mostraCartelleOnline(players);
+                });
+            } else {
+                mostraCartelleInGioco();
+            }
+            
             aggiornaStats();
         }
 
@@ -1088,6 +1141,12 @@
             if (isOnlineMode && currentRoom) {
                 database.ref('rooms/' + currentRoom + '/extracted').set(giocoCorrente.estratti);
                 console.log('📡 Pubblicato su Firebase:', index);
+                
+                // Ricarica cartelle per aggiornare numeri segnati
+                database.ref('rooms/' + currentRoom + '/players').once('value').then(snap => {
+                    const players = snap.val() || {};
+                    mostraCartelleOnline(players);
+                });
             }
             
             // Suono estrazione
