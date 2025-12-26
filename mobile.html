@@ -350,6 +350,10 @@
         function selezionaCartella(numero) {
             playerCartella = numero;
             
+            // RESET sessionStorage per nuova partita
+            sessionStorage.clear();
+            console.log('🔄 SessionStorage pulito - pronto per popup');
+            
             const playerId = Date.now().toString();
             database.ref('rooms/' + currentRoom + '/players/' + playerId).set({
                 nome: playerName,
@@ -390,6 +394,8 @@
         
         // ===== ASCOLTA ESTRAZIONI E VINCITE =====
         function ascoltaEstrazioni() {
+            console.log('🎧 Inizio ascolto Firebase per stanza:', currentRoom);
+            
             database.ref('rooms/' + currentRoom + '/extracted').on('value', snap => {
                 const estratti = snap.val() || [];
                 
@@ -402,29 +408,37 @@
             });
             
             // Ascolta vincite
+            console.log('🏆 Listener vincite attivo');
             database.ref('rooms/' + currentRoom + '/gameState').on('value', snap => {
                 const gameState = snap.val();
+                console.log('📊 GameState ricevuto:', gameState);
                 if (!gameState) return;
                 
                 const premi = gameState.premiVinti || {};
+                console.log('🏆 Premi:', premi);
                 
                 if (premi.ambo && !sessionStorage.getItem('ambo_shown')) {
+                    console.log('✅ Mostro popup AMBO');
                     sessionStorage.setItem('ambo_shown', 'true');
                     mostraPopupVincita('🎲 AMBO!', premi.ambo.nome, premi.ambo.cartella);
                 }
                 if (premi.terno && !sessionStorage.getItem('terno_shown')) {
+                    console.log('✅ Mostro popup TERNO');
                     sessionStorage.setItem('terno_shown', 'true');
                     mostraPopupVincita('🎪 TERNO!', premi.terno.nome, premi.terno.cartella);
                 }
                 if (premi.quaterna && !sessionStorage.getItem('quaterna_shown')) {
+                    console.log('✅ Mostro popup QUATERNA');
                     sessionStorage.setItem('quaterna_shown', 'true');
                     mostraPopupVincita('🎯 QUATERNA!', premi.quaterna.nome, premi.quaterna.cartella);
                 }
                 if (premi.cinquina && !sessionStorage.getItem('cinquina_shown')) {
+                    console.log('✅ Mostro popup CINQUINA');
                     sessionStorage.setItem('cinquina_shown', 'true');
                     mostraPopupVincita('🎊 CINQUINA!', premi.cinquina.nome, premi.cinquina.cartella);
                 }
                 if (premi.tombola && !sessionStorage.getItem('tombola_shown')) {
+                    console.log('✅ Mostro popup TOMBOLA');
                     sessionStorage.setItem('tombola_shown', 'true');
                     mostraPopupTombolaFinale(premi);
                 }
