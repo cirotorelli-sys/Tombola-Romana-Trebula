@@ -393,159 +393,17 @@
                 padding: 30px 20px;
             }
         }
-        /* POPUP CURIOSITÀ TREBULA */
-        .popup-curiosita {
-            display: none;
-            position: fixed;
-            z-index: 10000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.9);
-            animation: fadeIn 0.3s;
-        }
-        .popup-curiosita-content {
-            background: linear-gradient(135deg, #FFF8DC 0%, #FAEBD7 100%);
-            margin: 5% auto;
-            padding: 0;
-            width: 90%;
-            max-width: 700px;
-            border-radius: 20px;
-            box-shadow: 0 15px 60px rgba(0,0,0,0.6);
-            animation: zoomIn 0.4s;
-            border: 5px solid #8B4513;
-        }
-        .popup-curiosita-header {
-            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
-            color: white;
-            padding: 25px 30px;
-            border-radius: 15px 15px 0 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .popup-curiosita-header h2 {
-            margin: 0;
-            font-size: 1.8em;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .popup-curiosita-emoji {
-            font-size: 2.5em;
-        }
-        .close-curiosita {
-            color: white;
-            font-size: 3em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            line-height: 1;
-        }
-        .close-curiosita:hover {
-            transform: scale(1.2) rotate(90deg);
-            color: #FFD700;
-        }
-        .popup-curiosita-body {
-            padding: 35px;
-            color: #654321;
-            line-height: 1.8;
-            font-size: 1.1em;
-        }
-        .popup-curiosita-simbolo {
-            text-align: center;
-            padding: 20px;
-            background: white;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            border: 3px solid #D2691E;
-        }
-        .popup-curiosita-simbolo-grande {
-            font-size: 4em;
-            margin-bottom: 10px;
-        }
-        .popup-curiosita-simbolo-info {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: #8B0000;
-        }
-        .popup-curiosita-testo {
-            text-align: justify;
-            font-size: 1.05em;
-            line-height: 1.7;
-        }
-        .popup-curiosita-footer {
-            text-align: center;
-            padding: 20px;
-            border-top: 2px solid #D2691E;
-        }
-        .btn-continua {
-            background: linear-gradient(135deg, #228B22 0%, #32CD32 100%);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.2em;
-            font-weight: bold;
-            border-radius: 30px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            transition: all 0.3s;
-        }
-        .btn-continua:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-        }
-        @keyframes zoomIn {
-            from { transform: scale(0.5); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
     </style>
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 </head>
 <body>
     <div class="container">
         <h1>🏛️ TOMBOLA ROMANA - BANCO 🏛️</h1>
         <div class="subtitle">Gestione Completa del Gioco</div>
 
-        <!-- TOGGLE MODALITÀ -->
-        <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; background: white; padding: 15px; border-radius: 10px;">
-            <button id="btnModeLocal" class="mode-btn active" onclick="switchMode('local')" style="flex: 1; padding: 15px; font-size: 1.1em; font-weight: bold; border: 3px solid #228B22; background: linear-gradient(135deg, #228B22 0%, #32CD32 100%); color: white; border-radius: 10px; cursor: pointer;">
-                💻 Modalità Locale
-            </button>
-            <button id="btnModeOnline" class="mode-btn" onclick="switchMode('online')" style="flex: 1; padding: 15px; font-size: 1.1em; font-weight: bold; border: 3px solid #ddd; background: #f5f5f5; color: #666; border-radius: 10px; cursor: pointer;">
-                🌐 Modalità Online
-            </button>
-        </div>
-
-        <!-- PANNELLO ONLINE (nascosto di default) -->
-        <div id="onlinePanel" style="display: none; background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-            <h2 style="color: #4A90E2; text-align: center; margin-bottom: 15px;">🌐 Modalità Online</h2>
-            <div style="text-align: center;">
-                <p style="color: #666; margin-bottom: 15px;">Crea una stanza per giocare online con amici!</p>
-                <button onclick="alert('STEP 2: Firebase ' + (database ? 'FUNZIONA ✅' : 'NON funziona ❌'))" style="padding: 15px 30px; font-size: 1.2em; background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer;">
-                    🎮 Crea Stanza
-                </button>
-            </div>
-        </div>
-
         <!-- REGISTRAZIONE GIOCATORI -->
-        <div class="giocatori-section" id="localPanel">
+        <div class="giocatori-section">
             <div class="giocatori-header">
                 <h2 style="color: #228B22;">👥 Registrazione Giocatori</h2>
-                <div style="margin-top: 15px; padding: 15px; background: #FFF8DC; border-radius: 10px; border: 2px solid #D2691E;">
-                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 1.1em;">
-                        <input type="checkbox" id="toggleCuriosita" style="width: 20px; height: 20px; cursor: pointer;">
-                        <span style="font-weight: bold; color: #8B4513;">
-                            🏛️ Attiva Curiosità su Trebula Mutuesca
-                        </span>
-                    </label>
-                    <p style="margin: 10px 0 0 30px; font-size: 0.9em; color: #654321; font-style: italic;">
-                        Durante il gioco appariranno curiosità storiche su alcuni simboli estratti
-                    </p>
-                </div>
             </div>
             
             <div class="form-giocatore">
@@ -622,161 +480,11 @@
     </div>
 
     <script>
-        // SISTEMA CURIOSITÀ TREBULA
-        let curiositaAttive = false;
-        let curiositaData = null;
-        async function caricaCuriosita() {
-            try {
-                const response = await fetch('curiosita-trebula.json');
-                if (response.ok) {
-                    curiositaData = await response.json();
-                    console.log('✅ Curiosità Trebula caricate:', curiositaData.curiosita.length);
-                }
-            } catch (error) {
-                console.log('ℹ️ File curiosita-trebula.json non trovato');
-            }
-        }
-        caricaCuriosita();
-        function mostraCuriosita(simboloIndex) {
-            if (!curiositaAttive || !curiositaData) return;
-            const curiosita = curiositaData.curiosita.find(c => c.simboloIndex === simboloIndex);
-            if (curiosita) {
-                document.getElementById('curiositaEmoji').textContent = curiosita.immagine;
-                document.getElementById('curiositaTitolo').textContent = curiosita.titolo;
-                document.getElementById('curiositaSimbolo').textContent = curiosita.immagine;
-                document.getElementById('curiositaNumero').textContent = curiosita.numero;
-                document.getElementById('curiositaNome').textContent = curiosita.simbolo;
-                document.getElementById('curiositaTesto').textContent = curiosita.testo;
-                document.getElementById('popupCuriosita').style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            }
-        }
-        function chiudiCuriosita() {
-            document.getElementById('popupCuriosita').style.display = 'none';
-            document.body.style.overflow = '';
-        }
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                chiudiCuriosita();
-            }
-        });
-
-        // SISTEMA AUDIO
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        const audioCtx = new AudioContext();
-
-        // Suono estrazione (ding melodioso)
-        function suonoEstrazione() {
-            const now = audioCtx.currentTime;
-            const oscillator = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            
-            oscillator.frequency.setValueAtTime(659.25, now);
-            oscillator.frequency.setValueAtTime(783.99, now + 0.1);
-            oscillator.frequency.setValueAtTime(1046.50, now + 0.2);
-            
-            oscillator.type = 'sine';
-            
-            gainNode.gain.setValueAtTime(0.3, now);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-            
-            oscillator.start(now);
-            oscillator.stop(now + 0.4);
-        }
-
-        // Suono vittoria (campana/fanfara)
-        function suonoVittoria(tipo) {
-            const now = audioCtx.currentTime;
-            const note = tipo === 'tombola' 
-                ? [523.25, 659.25, 783.99, 1046.50, 783.99, 1046.50, 1318.51]
-                : [523.25, 659.25, 783.99];
-            
-            note.forEach((freq, index) => {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                
-                osc.frequency.value = freq;
-                osc.type = 'triangle';
-                
-                const startTime = now + (index * 0.2);
-                const stopTime = startTime + 0.3;
-                
-                gain.gain.setValueAtTime(0.4, startTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, stopTime);
-                
-                osc.start(startTime);
-                osc.stop(stopTime);
-            });
-            
-            if (tipo === 'tombola') {
-                setTimeout(() => {
-                    note.forEach((freq, index) => {
-                        const osc = audioCtx.createOscillator();
-                        const gain = audioCtx.createGain();
-                        
-                        osc.connect(gain);
-                        gain.connect(audioCtx.destination);
-                        
-                        osc.frequency.value = freq * 1.5;
-                        osc.type = 'sine';
-                        
-                        const startTime = audioCtx.currentTime + (index * 0.15);
-                        const stopTime = startTime + 0.25;
-                        
-                        gain.gain.setValueAtTime(0.2, startTime);
-                        gain.gain.exponentialRampToValueAtTime(0.01, stopTime);
-                        
-                        osc.start(startTime);
-                        osc.stop(stopTime);
-                    });
-                }, 300);
-            }
-        }
-
-        // Inizializza audio al primo click
-        document.addEventListener('click', function initAudio() {
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-        }, { once: true });
-
         // Dati incorporati
         const DATI_CARTELLE = {"simboli": [{"icona": "⚡", "nome": "Giove"}, {"icona": "⚔️", "nome": "Marte"}, {"icona": "💕", "nome": "Venere"}, {"icona": "🦉", "nome": "Minerva"}, {"icona": "🌊", "nome": "Nettuno"}, {"icona": "🏹", "nome": "Diana"}, {"icona": "☀️", "nome": "Apollo"}, {"icona": "🪽", "nome": "Mercurio"}, {"icona": "👑", "nome": "Giunone"}, {"icona": "🔥", "nome": "Vulcano"}, {"icona": "🏛️", "nome": "Foro"}, {"icona": "♨️", "nome": "Terme"}, {"icona": "🏟️", "nome": "Anfiteatro"}, {"icona": "🏇", "nome": "Circo"}, {"icona": "🛕", "nome": "Tempio"}, {"icona": "🏢", "nome": "Basilica"}, {"icona": "🎭", "nome": "Teatro"}, {"icona": "🌉", "nome": "Acquedotto"}, {"icona": "🏰", "nome": "Arco"}, {"icona": "📚", "nome": "Biblioteca"}, {"icona": "🏛️", "nome": "Curia"}, {"icona": "🏪", "nome": "Mercato"}, {"icona": "🏠", "nome": "Domus"}, {"icona": "🏡", "nome": "Villa"}, {"icona": "🏘️", "nome": "Insula"}, {"icona": "🚪", "nome": "Atrio"}, {"icona": "🌿", "nome": "Peristilio"}, {"icona": "🛋️", "nome": "Triclinio"}, {"icona": "🍳", "nome": "Cucina"}, {"icona": "🕯️", "nome": "Larario"}, {"icona": "👨‍🦱", "nome": "Imperatore"}, {"icona": "🎖️", "nome": "Console"}, {"icona": "📜", "nome": "Senatore"}, {"icona": "🛡️", "nome": "Centurione"}, {"icona": "⚔️", "nome": "Legionario"}, {"icona": "🗡️", "nome": "Gladiatore"}, {"icona": "👰", "nome": "Vestale"}, {"icona": "✍️", "nome": "Scriba"}, {"icona": "💰", "nome": "Mercante"}, {"icona": "🔨", "nome": "Artigiano"}, {"icona": "👘", "nome": "Toga"}, {"icona": "👔", "nome": "Tunica"}, {"icona": "👗", "nome": "Stola"}, {"icona": "🧣", "nome": "Palla"}, {"icona": "👡", "nome": "Sandali"}, {"icona": "👞", "nome": "Calcei"}, {"icona": "📍", "nome": "Fibula"}, {"icona": "🌿", "nome": "Corona"}, {"icona": "🏺", "nome": "Anfora"}, {"icona": "🪔", "nome": "Lucerna"}, {"icona": "🖊️", "nome": "Stilo"}, {"icona": "📝", "nome": "Tavoletta"}, {"icona": "📜", "nome": "Rotolo"}, {"icona": "🪙", "nome": "Moneta"}, {"icona": "🔑", "nome": "Chiave"}, {"icona": "🪞", "nome": "Specchio"}, {"icona": "💈", "nome": "Pettine"}, {"icona": "🎲", "nome": "Dado"}, {"icona": "🦴", "nome": "Astragalo"}, {"icona": "💍", "nome": "Sigillo"}, {"icona": "🗡️", "nome": "Gladio"}, {"icona": "🛡️", "nome": "Scudo"}, {"icona": "🔱", "nome": "Lancia"}, {"icona": "⛑️", "nome": "Elmo"}, {"icona": "🦺", "nome": "Corazza"}, {"icona": "🦅", "nome": "Aquila"}, {"icona": "🚩", "nome": "Vessillo"}, {"icona": "🏹", "nome": "Catapulta"}, {"icona": "🍞", "nome": "Pane"}, {"icona": "🍷", "nome": "Vino"}, {"icona": "🫒", "nome": "Olive"}, {"icona": "🐟", "nome": "Garum"}, {"icona": "🍎", "nome": "Frutta"}, {"icona": "🧀", "nome": "Formaggio"}, {"icona": "🍯", "nome": "Miele"}, {"icona": "🐗", "nome": "Cinghiale"}, {"icona": "🐠", "nome": "Pesce"}, {"icona": "🍇", "nome": "Uva"}, {"icona": "🚜", "nome": "Aratro"}, {"icona": "🔪", "nome": "Falce"}, {"icona": "🔨", "nome": "Martello"}, {"icona": "⚒️", "nome": "Incudine"}, {"icona": "📐", "nome": "Compasso"}, {"icona": "📏", "nome": "Livella"}, {"icona": "🎡", "nome": "Ruota"}, {"icona": "🦅", "nome": "Aquila"}, {"icona": "🐺", "nome": "Lupo"}, {"icona": "🐴", "nome": "Cavallo"}, {"icona": "🐕", "nome": "Cane"}, {"icona": "🐬", "nome": "Delfino"}], "cartelle": [[64, 81, 3, 32, 34, 59, 86, 38, 41, 29, 79, 65, 4, 11, 69], [28, 52, 34, 3, 89, 43, 66, 68, 57, 84, 19, 31, 49, 65, 20], [2, 80, 42, 3, 35, 6, 62, 64, 50, 87, 82, 20, 53, 56, 38], [84, 25, 77, 3, 23, 89, 37, 79, 67, 58, 42, 11, 50, 34, 56], [65, 32, 71, 70, 42, 85, 63, 61, 58, 88, 53, 20, 13, 31, 12], [76, 51, 2, 82, 27, 61, 1, 67, 33, 78, 80, 15, 53, 87, 23], [34, 2, 15, 59, 26, 54, 63, 11, 36, 84, 14, 81, 56, 80, 38], [25, 24, 38, 81, 73, 2, 51, 18, 58, 87, 50, 19, 4, 44, 65], [6, 60, 16, 65, 73, 34, 66, 85, 27, 2, 52, 79, 47, 75, 38], [43, 1, 50, 71, 67, 26, 49, 64, 32, 6, 10, 77, 3, 12, 74], [48, 9, 37, 54, 83, 38, 2, 29, 10, 20, 77, 19, 44, 47, 85], [33, 3, 40, 75, 86, 71, 82, 17, 22, 32, 66, 14, 23, 15, 27], [8, 74, 85, 32, 68, 12, 70, 59, 60, 11, 86, 62, 28, 48, 31], [65, 5, 20, 47, 82, 60, 48, 7, 49, 86, 32, 89, 61, 53, 6], [13, 88, 31, 43, 72, 71, 14, 54, 9, 80, 47, 53, 39, 73, 65], [33, 20, 79, 55, 77, 35, 89, 23, 24, 76, 59, 1, 15, 53, 65], [32, 79, 58, 13, 67, 20, 10, 55, 6, 60, 8, 18, 23, 43, 46], [83, 0, 85, 12, 80, 10, 26, 87, 30, 11, 27, 16, 51, 4, 68], [53, 60, 43, 40, 3, 52, 6, 63, 86, 21, 25, 24, 12, 4, 54], [28, 0, 74, 14, 11, 21, 12, 77, 63, 42, 73, 41, 6, 48, 87], [85, 48, 37, 66, 38, 75, 21, 16, 70, 39, 56, 0, 14, 29, 59], [76, 34, 22, 49, 41, 64, 67, 79, 69, 1, 48, 65, 5, 58, 6], [41, 59, 85, 88, 57, 32, 43, 6, 11, 30, 14, 24, 36, 75, 69], [58, 25, 48, 19, 47, 17, 76, 64, 79, 36, 18, 61, 34, 41, 14], [37, 59, 21, 17, 83, 12, 39, 45, 19, 18, 16, 1, 42, 60, 31], [54, 21, 65, 29, 85, 15, 2, 70, 75, 52, 16, 6, 9, 22, 58], [58, 65, 86, 7, 37, 72, 52, 75, 35, 54, 67, 23, 59, 27, 66], [11, 83, 51, 31, 86, 29, 2, 49, 41, 82, 61, 9, 23, 45, 19], [16, 17, 51, 32, 26, 24, 74, 61, 66, 58, 73, 56, 57, 15, 43], [54, 19, 47, 37, 5, 80, 7, 43, 34, 33, 2, 11, 26, 32, 63], [68, 12, 55, 60, 3, 34, 1, 35, 76, 19, 59, 75, 46, 88, 50], [48, 39, 77, 66, 79, 7, 61, 87, 47, 1, 59, 41, 26, 78, 51], [35, 24, 37, 55, 41, 40, 89, 73, 85, 60, 57, 49, 87, 76, 46], [47, 36, 57, 11, 60, 29, 52, 9, 5, 67, 76, 8, 22, 42, 38], [51, 42, 77, 69, 7, 44, 74, 21, 43, 37, 40, 68, 30, 59, 31], [6, 31, 89, 19, 23, 75, 55, 76, 51, 47, 53, 41, 72, 39, 37], [44, 83, 6, 2, 64, 17, 35, 58, 62, 50, 18, 48, 30, 31, 45], [14, 64, 5, 31, 3, 0, 85, 88, 50, 45, 47, 76, 41, 58, 79], [54, 31, 51, 68, 78, 59, 50, 1, 24, 65, 84, 22, 32, 9, 49], [9, 17, 89, 78, 53, 81, 59, 5, 65, 14, 37, 77, 55, 42, 32], [55, 27, 14, 50, 44, 1, 35, 31, 20, 37, 28, 8, 87, 15, 12], [70, 0, 37, 28, 52, 30, 24, 46, 57, 69, 77, 6, 18, 86, 12], [21, 28, 35, 53, 69, 24, 72, 23, 79, 36, 40, 14, 75, 56, 17], [79, 37, 51, 34, 49, 55, 76, 72, 69, 38, 40, 19, 8, 23, 47], [28, 33, 51, 86, 30, 64, 23, 41, 24, 62, 61, 84, 7, 35, 44], [68, 57, 24, 19, 30, 9, 6, 77, 17, 8, 21, 61, 82, 86, 79], [2, 8, 43, 21, 86, 3, 78, 10, 59, 27, 73, 74, 46, 16, 63], [62, 74, 16, 49, 36, 88, 82, 67, 13, 37, 41, 34, 8, 52, 30], [2, 86, 30, 48, 46, 54, 61, 64, 77, 80, 68, 31, 78, 14, 11], [74, 20, 42, 87, 35, 9, 48, 70, 24, 61, 50, 49, 82, 31, 40], [84, 42, 85, 12, 3, 68, 11, 40, 8, 53, 71, 16, 15, 39, 73], [15, 64, 71, 10, 82, 65, 36, 48, 88, 17, 1, 54, 79, 45, 8], [61, 48, 44, 45, 52, 50, 70, 39, 4, 53, 66, 18, 86, 69, 29], [54, 80, 48, 46, 84, 51, 43, 7, 81, 79, 23, 27, 70, 69, 21], [56, 60, 5, 63, 85, 74, 88, 44, 11, 33, 69, 62, 47, 81, 25], [71, 21, 77, 56, 81, 15, 40, 51, 50, 60, 46, 41, 24, 32, 52], [19, 9, 39, 40, 2, 14, 85, 49, 89, 34, 44, 0, 8, 74, 5], [53, 87, 64, 82, 9, 0, 60, 50, 73, 49, 56, 6, 78, 35, 85], [52, 0, 38, 22, 45, 82, 1, 77, 66, 40, 46, 23, 56, 89, 36], [68, 15, 7, 56, 87, 59, 85, 27, 3, 35, 11, 58, 79, 60, 14], [34, 51, 72, 78, 87, 29, 4, 83, 55, 19, 15, 66, 76, 48, 82], [65, 61, 12, 2, 89, 40, 45, 4, 86, 80, 60, 35, 22, 62, 84], [50, 75, 44, 67, 89, 80, 70, 88, 78, 1, 66, 0, 57, 86, 49], [61, 3, 83, 41, 84, 42, 0, 15, 54, 82, 35, 64, 73, 20, 72], [25, 0, 54, 17, 29, 10, 36, 60, 14, 39, 84, 1, 11, 42, 23], [67, 84, 73, 71, 57, 55, 28, 88, 17, 62, 89, 43, 47, 44, 23], [7, 52, 42, 8, 36, 30, 12, 2, 19, 44, 70, 47, 25, 71, 38], [41, 77, 18, 46, 81, 17, 67, 29, 19, 62, 1, 16, 56, 88, 87], [5, 87, 54, 61, 29, 35, 20, 71, 4, 30, 55, 72, 58, 16, 52], [42, 28, 87, 56, 29, 57, 5, 12, 37, 78, 51, 77, 39, 71, 38], [9, 73, 68, 88, 76, 16, 74, 70, 24, 12, 20, 3, 39, 38, 62], [15, 69, 33, 7, 32, 22, 5, 21, 81, 44, 29, 13, 70, 39, 53], [81, 45, 47, 36, 66, 49, 71, 88, 58, 53, 89, 84, 7, 74, 62], [34, 64, 82, 24, 38, 89, 66, 15, 39, 56, 75, 72, 74, 31, 88], [67, 83, 57, 29, 69, 78, 45, 20, 21, 32, 5, 62, 22, 80, 56], [67, 73, 63, 78, 4, 9, 3, 33, 54, 30, 26, 52, 43, 27, 62], [49, 17, 29, 81, 38, 28, 69, 26, 13, 74, 58, 44, 68, 16, 46], [62, 42, 43, 5, 75, 13, 50, 69, 64, 16, 27, 36, 45, 18, 84], [66, 40, 1, 20, 81, 72, 8, 89, 70, 44, 30, 57, 74, 88, 73], [76, 43, 67, 18, 71, 84, 8, 25, 73, 5, 70, 82, 9, 34, 10], [22, 28, 18, 30, 70, 63, 26, 33, 76, 64, 8, 62, 55, 9, 72], [16, 66, 72, 36, 33, 55, 25, 22, 39, 84, 26, 75, 80, 4, 20], [4, 30, 83, 17, 81, 0, 71, 22, 78, 75, 55, 21, 80, 13, 18], [17, 36, 40, 4, 10, 28, 18, 71, 46, 45, 69, 81, 22, 75, 57], [4, 39, 13, 68, 22, 83, 57, 5, 72, 33, 45, 52, 21, 26, 81], [46, 72, 76, 13, 18, 36, 63, 83, 68, 22, 45, 10, 26, 40, 25], [55, 67, 25, 83, 4, 80, 72, 18, 7, 26, 57, 45, 63, 46, 78], [33, 68, 4, 26, 27, 0, 78, 28, 46, 7, 10, 83, 63, 80, 25], [81, 3, 14, 35, 40, 4, 34, 86, 67, 44, 29, 77, 12, 10, 28], [32, 59, 35, 81, 11, 61, 77, 10, 1, 44, 33, 68, 3, 80, 88]]};
         
         const SIMBOLI = DATI_CARTELLE.simboli;
         const CARTELLE_PREDEFINITE = DATI_CARTELLE.cartelle;
-
-        // Variabili modalità
-        let isOnlineMode = false;
-
-        // Firebase Config
-        const firebaseConfig = {
-            apiKey: "AIzaSyBhmacedonia6z3kNrKtLZkaOcHfiD2XbmJE9r4",
-            authDomain: "tombola-romana.firebaseapp.com",
-            databaseURL: "https://tombola-romana-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "tombola-romana",
-            storageBucket: "tombola-romana.firebasestorage.app",
-            messagingSenderId: "970863494827",
-            appId: "1:970863494827:web:a8e3f42e5c8a40489ac4fb"
-        };
-
-        // Inizializza Firebase
-        let firebaseApp = null;
-        let database = null;
-
-        try {
-            firebaseApp = firebase.initializeApp(firebaseConfig);
-            database = firebase.database();
-            console.log('✅ Firebase inizializzato');
-        } catch (error) {
-            console.error('❌ Errore Firebase:', error);
-        }
 
         let giocoCorrente = {
             estratti: [],
@@ -790,24 +498,6 @@
             },
             giocatori: [] // [{nome: "Mario", cartella: 23}, ...]
         };
-
-        // Funzione toggle modalità
-        function switchMode(mode) {
-            isOnlineMode = (mode === 'online');
-            
-            // Aggiorna pulsanti
-            document.getElementById('btnModeLocal').style.border = (mode === 'local') ? '3px solid #228B22' : '3px solid #ddd';
-            document.getElementById('btnModeLocal').style.background = (mode === 'local') ? 'linear-gradient(135deg, #228B22 0%, #32CD32 100%)' : '#f5f5f5';
-            document.getElementById('btnModeLocal').style.color = (mode === 'local') ? 'white' : '#666';
-            
-            document.getElementById('btnModeOnline').style.border = (mode === 'online') ? '3px solid #4A90E2' : '3px solid #ddd';
-            document.getElementById('btnModeOnline').style.background = (mode === 'online') ? 'linear-gradient(135deg, #4A90E2 0%, #357ABD 100%)' : '#f5f5f5';
-            document.getElementById('btnModeOnline').style.color = (mode === 'online') ? 'white' : '#666';
-            
-            // Mostra/nascondi pannelli
-            document.getElementById('localPanel').style.display = (mode === 'local') ? 'block' : 'none';
-            document.getElementById('onlinePanel').style.display = (mode === 'online') ? 'block' : 'none';
-        }
 
         // Popola il select delle cartelle
         function popolaSelectCartelle() {
@@ -914,12 +604,6 @@
                 return;
             }
 
-            // Attiva/disattiva curiosità
-            curiositaAttive = document.getElementById('toggleCuriosita').checked;
-            if (curiositaAttive) {
-                console.log('🏛️ Curiosità Trebula ATTIVE');
-            }
-
             giocoCorrente.estratti = [];
             giocoCorrente.inCorso = true;
             giocoCorrente.premiVinti = {
@@ -1012,13 +696,7 @@
             segnaSuCartelle(index);
             aggiornaStats();
             
-            // Suono estrazione
-            suonoEstrazione();
-            
             setTimeout(() => controllaVittorie(), 500);
-            
-            // Mostra curiosità se attive
-            setTimeout(() => mostraCuriosita(index), 600);
         }
 
         function segnaSuCartelle(simboloIndex) {
@@ -1122,10 +800,6 @@
 
         function mostraVittoria(messaggio) {
             if (document.querySelector('.vittoria-alert')) return;
-            
-            // Suono vittoria
-            const tipoSuono = messaggio.includes('TOMBOLA') ? 'tombola' : 'premio';
-            suonoVittoria(tipoSuono);
             
             document.getElementById('btnEstrai').disabled = true;
             
@@ -1299,33 +973,5 @@
             aggiornaStats();
         };
     </script>
-
-    <!-- POPUP CURIOSITÀ TREBULA -->
-    <div id="popupCuriosita" class="popup-curiosita">
-        <div class="popup-curiosita-content">
-            <div class="popup-curiosita-header">
-                <h2>
-                    <span class="popup-curiosita-emoji" id="curiositaEmoji">🏛️</span>
-                    <span id="curiositaTitolo">Curiosità su Trebula Mutuesca</span>
-                </h2>
-                <span class="close-curiosita" onclick="chiudiCuriosita()">&times;</span>
-            </div>
-            <div class="popup-curiosita-body">
-                <div class="popup-curiosita-simbolo">
-                    <div class="popup-curiosita-simbolo-grande" id="curiositaSimbolo">🏛️</div>
-                    <div class="popup-curiosita-simbolo-info">
-                        <span id="curiositaNumero">1</span> - <span id="curiositaNome">Foro</span>
-                    </div>
-                </div>
-                <div class="popup-curiosita-testo" id="curiositaTesto"></div>
-            </div>
-            <div class="popup-curiosita-footer">
-                <button class="btn-continua" onclick="chiudiCuriosita()">
-                    ▶️ Continua il Gioco
-                </button>
-            </div>
-        </div>
-    </div>
-
 </body>
 </html>
