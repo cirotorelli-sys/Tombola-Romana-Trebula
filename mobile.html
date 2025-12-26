@@ -133,17 +133,46 @@
         <div class="container">
             <h1>🏛️ TOMBOLA ROMANA</h1>
             
-            <div class="input-group">
-                <label>Codice Stanza</label>
-                <input type="text" id="codiceStanza" placeholder="ABC123" maxlength="6" style="text-transform: uppercase;">
+            <!-- TOGGLE LOCALE/ONLINE -->
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <button id="btnLocale" onclick="switchMode('locale')" 
+                        style="flex: 1; padding: 12px; font-size: 1em; border-radius: 10px; 
+                               cursor: pointer; font-weight: bold; border: 2px solid #D2691E;
+                               background: linear-gradient(135deg, #90EE90 0%, #32CD32 100%); color: #654321;">
+                    💻 Modalità Locale
+                </button>
+                <button id="btnOnline" onclick="switchMode('online')" 
+                        style="flex: 1; padding: 12px; font-size: 1em; border-radius: 10px; 
+                               cursor: pointer; font-weight: bold; border: 2px solid #D2691E;
+                               background: white; color: #654321;">
+                    🌐 Modalità Online
+                </button>
             </div>
             
-            <div class="input-group">
-                <label>Il Tuo Nome</label>
-                <input type="text" id="nomeGiocatore" placeholder="Mario">
+            <!-- PANNELLO LOCALE -->
+            <div id="panelLocale">
+                <p style="color: #654321; margin-bottom: 15px; text-align: center;">
+                    Gioca da solo senza connessione
+                </p>
+                <button onclick="vaiACartelleLocale()" style="width: 100%;">
+                    🎲 Scegli la Tua Cartella
+                </button>
             </div>
             
-            <button onclick="joinStanza()">🎮 Entra nella Stanza</button>
+            <!-- PANNELLO ONLINE -->
+            <div id="panelOnline" style="display: none;">
+                <div class="input-group">
+                    <label>Codice Stanza</label>
+                    <input type="text" id="codiceStanza" placeholder="ABC123" maxlength="6" style="text-transform: uppercase;">
+                </div>
+                
+                <div class="input-group">
+                    <label>Il Tuo Nome</label>
+                    <input type="text" id="nomeGiocatore" placeholder="Mario">
+                </div>
+                
+                <button onclick="joinStanza()">🎮 Entra nella Stanza</button>
+            </div>
         </div>
     </div>
     
@@ -192,6 +221,62 @@
         let currentRoom = null;
         let playerName = null;
         let playerCartella = null;
+        let isLocaleMode = true; // Default locale
+        
+        // Switch modalità
+        function switchMode(mode) {
+            isLocaleMode = (mode === 'locale');
+            
+            if (isLocaleMode) {
+                // Locale
+                document.getElementById('btnLocale').style.background = 'linear-gradient(135deg, #90EE90 0%, #32CD32 100%)';
+                document.getElementById('btnOnline').style.background = 'white';
+                document.getElementById('panelLocale').style.display = 'block';
+                document.getElementById('panelOnline').style.display = 'none';
+            } else {
+                // Online
+                document.getElementById('btnLocale').style.background = 'white';
+                document.getElementById('btnOnline').style.background = 'linear-gradient(135deg, #4A90E2 0%, #357ABD 100%)';
+                document.getElementById('panelLocale').style.display = 'none';
+                document.getElementById('panelOnline').style.display = 'block';
+            }
+        }
+        
+        // Vai a selezione cartelle LOCALE
+        function vaiACartelleLocale() {
+            document.getElementById('paginaJoin').style.display = 'none';
+            document.getElementById('paginaCartelle').style.display = 'block';
+            mostraGrigliaCartelleLocale();
+        }
+        
+        // Mostra griglia 90 cartelle per LOCALE
+        function mostraGrigliaCartelleLocale() {
+            const grid = document.getElementById('cartelleGrid');
+            grid.innerHTML = '';
+            
+            for (let i = 1; i <= 90; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                btn.className = 'cartella-btn';
+                btn.onclick = () => selezionaCartellaLocale(i);
+                grid.appendChild(btn);
+            }
+        }
+        
+        // Selezione cartella LOCALE
+        function selezionaCartellaLocale(numero) {
+            playerCartella = numero;
+            playerName = "Giocatore"; // Nome default in locale
+            
+            document.getElementById('paginaCartelle').style.display = 'none';
+            document.getElementById('paginaCartella').style.display = 'block';
+            
+            document.getElementById('numeroCartella').textContent = numero;
+            document.getElementById('displayNome').textContent = playerName;
+            
+            mostraCartella();
+            // In locale NON ascolta Firebase, giochi da solo
+        }
         
         // Join stanza
         function joinStanza() {
