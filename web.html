@@ -1405,7 +1405,50 @@
                 alert.remove();
             }
             
-            iniziaGioco();
+            // Reset completo senza conferma
+            giocoCorrente.estratti = [];
+            giocoCorrente.inCorso = false;
+            giocoCorrente.premiVinti = {
+                ambo: null,
+                terno: null,
+                quaterna: null,
+                cinquina: null,
+                tombola: null
+            };
+            
+            // Reset Firebase se online
+            if (isOnlineMode && currentRoom) {
+                database.ref('rooms/' + currentRoom + '/extracted').set([]);
+                database.ref('rooms/' + currentRoom + '/players').set({}); // AZZERA GIOCATORI
+                database.ref('rooms/' + currentRoom + '/gameState').set({
+                    inCorso: false,
+                    premiVinti: {
+                        ambo: null,
+                        terno: null,
+                        quaterna: null,
+                        cinquina: null,
+                        tombola: null
+                    }
+                });
+                console.log('🔄 Nuova partita - Firebase resettato');
+            }
+            
+            document.getElementById('btnEstrai').disabled = true;
+            document.getElementById('currentExtraction').innerHTML = 
+                isOnlineMode ? 'Aspetta che i giocatori si connettano!' : 'Registra i giocatori e premi "Inizia Partita"';
+            document.getElementById('extractionHistory').innerHTML = '';
+            
+            // Reset tabellone
+            document.querySelectorAll('.simbolo').forEach(el => {
+                el.classList.remove('estratto');
+            });
+            
+            // Reset cartelle
+            document.getElementById('cartelleGrid').innerHTML = '';
+            
+            aggiornaStats();
+            
+            console.log('✅ Pronto per nuova partita');
         }
 
         function aggiornaStats() {
@@ -1429,6 +1472,7 @@
                 // Reset Firebase se online
                 if (isOnlineMode && currentRoom) {
                     database.ref('rooms/' + currentRoom + '/extracted').set([]);
+                    database.ref('rooms/' + currentRoom + '/players').set({}); // ← AZZERA GIOCATORI
                     database.ref('rooms/' + currentRoom + '/gameState').set({
                         inCorso: false,
                         premiVinti: {
@@ -1439,7 +1483,7 @@
                             tombola: null
                         }
                     });
-                    console.log('🔄 Firebase resettato');
+                    console.log('🔄 Firebase resettato (giocatori rimossi)');
                 }
                 
                 document.getElementById('btnEstrai').disabled = true;
@@ -1462,7 +1506,7 @@
                 
                 aggiornaStats();
                 
-                console.log('✅ Gioco resettato');
+                console.log('✅ Gioco resettato completamente');
             }
         }
 

@@ -295,6 +295,113 @@
                     }
                 });
             });
+            
+            // Ascolta vincite
+            database.ref('rooms/' + currentRoom + '/gameState').on('value', snap => {
+                const gameState = snap.val();
+                if (!gameState) return;
+                
+                const premi = gameState.premiVinti || {};
+                
+                // Popup vincite
+                if (premi.ambo && !sessionStorage.getItem('ambo_shown')) {
+                    sessionStorage.setItem('ambo_shown', 'true');
+                    mostraPopupVincita('🎲 AMBO!', premi.ambo.nome, premi.ambo.cartella);
+                }
+                if (premi.terno && !sessionStorage.getItem('terno_shown')) {
+                    sessionStorage.setItem('terno_shown', 'true');
+                    mostraPopupVincita('🎪 TERNO!', premi.terno.nome, premi.terno.cartella);
+                }
+                if (premi.quaterna && !sessionStorage.getItem('quaterna_shown')) {
+                    sessionStorage.setItem('quaterna_shown', 'true');
+                    mostraPopupVincita('🎯 QUATERNA!', premi.quaterna.nome, premi.quaterna.cartella);
+                }
+                if (premi.cinquina && !sessionStorage.getItem('cinquina_shown')) {
+                    sessionStorage.setItem('cinquina_shown', 'true');
+                    mostraPopupVincita('🎊 CINQUINA!', premi.cinquina.nome, premi.cinquina.cartella);
+                }
+                if (premi.tombola && !sessionStorage.getItem('tombola_shown')) {
+                    sessionStorage.setItem('tombola_shown', 'true');
+                    mostraPopupTombolaFinale(premi);
+                }
+            });
+        }
+        
+        // Mostra popup vincita
+        function mostraPopupVincita(titolo, nome, cartella) {
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.8); display: flex; align-items: center;
+                justify-content: center; z-index: 10000;
+            `;
+            
+            overlay.innerHTML = `
+                <div style="background: linear-gradient(135deg, #FFF8DC 0%, #F0E68C 100%);
+                            padding: 30px; border-radius: 20px; text-align: center;
+                            border: 5px solid #8B0000; box-shadow: 0 0 30px rgba(139,0,0,0.5);
+                            max-width: 80%; animation: pulse 0.5s;">
+                    <div style="font-size: 2.5em; margin-bottom: 15px;">${titolo}</div>
+                    <div style="font-size: 1.5em; color: #8B0000; font-weight: bold;">${nome}</div>
+                    <div style="font-size: 1.2em; color: #654321; margin-top: 10px;">Cartella ${cartella}</div>
+                    <button onclick="this.closest('div[style*=fixed]').remove()" 
+                            style="margin-top: 20px; padding: 15px 40px; font-size: 1.2em;
+                                   background: #8B0000; color: white; border: none;
+                                   border-radius: 10px; cursor: pointer; font-weight: bold;">
+                        OK
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(overlay);
+        }
+        
+        // Popup tombola finale
+        function mostraPopupTombolaFinale(premi) {
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.9); display: flex; align-items: center;
+                justify-content: center; z-index: 10000;
+            `;
+            
+            let riepilogo = '<div style="margin: 20px 0; text-align: left; font-size: 1.1em;">';
+            if (premi.ambo) riepilogo += `<div>🎲 <b>Ambo:</b> ${premi.ambo.nome} (Cartella ${premi.ambo.cartella})</div>`;
+            if (premi.terno) riepilogo += `<div>🎪 <b>Terno:</b> ${premi.terno.nome} (Cartella ${premi.terno.cartella})</div>`;
+            if (premi.quaterna) riepilogo += `<div>🎯 <b>Quaterna:</b> ${premi.quaterna.nome} (Cartella ${premi.quaterna.cartella})</div>`;
+            if (premi.cinquina) riepilogo += `<div>🎊 <b>Cinquina:</b> ${premi.cinquina.nome} (Cartella ${premi.cinquina.cartella})</div>`;
+            if (premi.tombola) riepilogo += `<div style="color: #FFD700; font-size: 1.3em; margin-top: 10px;">🏆 <b>TOMBOLA:</b> ${premi.tombola.nome} (Cartella ${premi.tombola.cartella})</div>`;
+            riepilogo += '</div>';
+            
+            overlay.innerHTML = `
+                <div style="background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
+                            padding: 40px; border-radius: 20px; text-align: center;
+                            border: 5px solid #FFD700; box-shadow: 0 0 50px rgba(255,215,0,0.8);
+                            max-width: 90%; color: white;">
+                    <div style="font-size: 3em; margin-bottom: 20px; text-shadow: 2px 2px 4px #000;">
+                        🎊 TOMBOLA! 🎊
+                    </div>
+                    <div style="font-size: 1.8em; margin-bottom: 10px;">Partita Terminata!</div>
+                    ${riepilogo}
+                    <button onclick="nuovaPartita()" 
+                            style="margin-top: 30px; padding: 20px 50px; font-size: 1.5em;
+                                   background: #FFD700; color: #8B0000; border: none;
+                                   border-radius: 15px; cursor: pointer; font-weight: bold;
+                                   box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                        🎮 Nuova Partita
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(overlay);
+        }
+        
+        // Nuova partita da mobile
+        function nuovaPartita() {
+            // Pulisci sessionStorage
+            sessionStorage.clear();
+            // Ricarica pagina
+            location.reload();
         }
     </script>
 </body>
