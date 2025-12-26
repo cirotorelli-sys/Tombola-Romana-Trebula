@@ -1218,12 +1218,40 @@
         
         // NUOVA FUNZIONE: Mostra cartelle online nella griglia principale
         function mostraCartelleOnline(players) {
+            // IMPORTANTE: Funziona solo in modalità Online!
+            if (!isOnlineMode) {
+                console.log('⏭️ Skip mostraCartelleOnline (modalità locale)');
+                return;
+            }
+            
+            console.log('🔍 mostraCartelleOnline chiamata', players);
             const container = document.getElementById('cartelleGrid');
+            if (!container) {
+                console.error('❌ Container cartelleGrid non trovato!');
+                return;
+            }
+            
+            if (!SIMBOLI || !CARTELLE_PREDEFINITE) {
+                console.error('❌ SIMBOLI o CARTELLE_PREDEFINITE non definiti!');
+                return;
+            }
+            
             container.innerHTML = '';
             
+            if (Object.keys(players).length === 0) {
+                container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px;">Nessuna cartella in gioco. Aspetta che i giocatori si connettano.</div>';
+                return;
+            }
+            
             Object.entries(players).forEach(([playerId, player]) => {
+                console.log(`📋 Cartella ${player.cartella} per ${player.name}`);
                 const numeroCartella = player.cartella;
                 const simboliCartella = CARTELLE_PREDEFINITE[numeroCartella - 1];
+                
+                if (!simboliCartella) {
+                    console.error(`❌ Cartella ${numeroCartella} non trovata!`);
+                    return;
+                }
                 
                 const cartellaDiv = document.createElement('div');
                 cartellaDiv.className = 'cartella';
@@ -1234,8 +1262,23 @@
                 container.appendChild(cartellaDiv);
                 
                 const grid = document.getElementById(`cartella-online-${playerId}`);
-                simboliCartella.forEach(simboloIndex => {
+                if (!grid) {
+                    console.error(`❌ Grid per ${playerId} non trovata!`);
+                    return;
+                }
+                
+                simboliCartella.forEach((simboloIndex, idx) => {
+                    if (simboloIndex < 0 || simboloIndex >= SIMBOLI.length) {
+                        console.error(`❌ Indice simbolo ${simboloIndex} non valido!`);
+                        return;
+                    }
+                    
                     const simbolo = SIMBOLI[simboloIndex];
+                    if (!simbolo) {
+                        console.error(`❌ Simbolo index ${simboloIndex} undefined!`);
+                        return;
+                    }
+                    
                     const cella = document.createElement('div');
                     cella.className = 'cartella-cella';
                     cella.dataset.simbolo = simboloIndex;
@@ -1244,13 +1287,17 @@
                         <div class="cartella-cella-nome">${simbolo.nome}</div>
                     `;
                     
-                    if (giocoCorrente.estratti.includes(simboloIndex)) {
+                    const isSegnato = giocoCorrente.estratti && giocoCorrente.estratti.includes(simboloIndex);
+                    if (isSegnato) {
                         cella.classList.add('segnato');
+                        console.log(`✅ Numero ${simboloIndex + 1} segnato su cartella ${numeroCartella}`);
                     }
                     
                     grid.appendChild(cella);
                 });
             });
+            
+            console.log('✅ Cartelle online create');
         }
         
         function syncExtractedNumbers(e){if(!Array.isArray(e))return;e.forEach(t=>{if(!giocoCorrente.estratti.includes(t)){giocoCorrente.estratti.push(t);const a=SIMBOLI[t],o=document.getElementById(`simbolo-${t}`);o&&o.classList.add("estratto");if(e[e.length-1]===t){document.getElementById("currentExtraction").innerHTML=`\n                            <div style="font-size: 1.2em; font-weight: bold; color: #8B0000; margin-bottom: 5px;">${t+1}</div>\n                            <div style="font-size: 2.5em;">${a.icona}</div>\n                            <div style="font-size: 0.8em; margin-top: 10px; font-weight: bold;">${a.nome}</div>\n                        `;suonoEstrazione()}segnaSuCartelle(t)}});aggiornaStats()}function syncGameState(e){e&&(giocoCorrente.inCorso=e.inCorso||!1,giocoCorrente.premiVinti=e.premiVinti||{ambo:null,terno:null,quaterna:null,cinquina:null,tombola:null})}function publishExtraction(e){if(!isOnlineMode||!isHost||!currentRoom||!database)return;const t=database.ref("rooms/"+currentRoom);t.child("extracted").once("value",a=>{const o=a.val()||[];o.includes(e)||(o.push(e),t.child("extracted").set(o),console.log("📡 Pubblicato:",e+1))})}function publishGameState(){isOnlineMode&&isHost&&currentRoom&&database&&(database.ref("rooms/"+currentRoom+"/gameState").set({inCorso:giocoCorrente.inCorso,premiVinti:giocoCorrente.premiVinti}),console.log("📡 Stato pubblicato"))}
